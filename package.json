@@ -1,0 +1,29 @@
+{
+  "name": "chessq",
+  "version": "1.0.0",
+  "description": "Chess game analyser",
+  "main": "index.js",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon --watch . --type js --exec 'babel-node app.js'",
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeffML/chessQ.git"
+  },
+  "keywords": [
+    "chess",
+    "analysis"
+  ],
+  "author": "Jeff M. Lowery",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/JeffML/chessQ/issues"
+  },
+  "homepage": "https://github.com/JeffML/chessQ#readme"
+}
