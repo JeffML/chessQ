@@ -5,11 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1"
+    "babel-preset-env": "^1.6.1",
+    "express": "^4.16.2",
+    "stockfish": "^8.0.0"
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "nodemon --watch . --type js --exec 'babel-node app.js'",
+    "dev": "nodemon app.js --exec babel-node --presets env",
+    "bare": "node node_modules/stockfish/src/stockfish.js",
     "test": "mocha test"
   },
   "repository": {
