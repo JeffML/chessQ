@@ -1,27 +1,15 @@
 import express from 'express';
+import bodyParser from 'body-parser';
+import {graphqlExpress, graphiqlExpress} from 'apollo-server-express'
+import schema from './schema';
+
+const PORT = 3001;
 const app = express();
-import stockfish from 'stockfish'
-const sf = stockfish();
+const graphiql = true;
 
-const pm = (message) => {
-  console.log("Posting:", message)
-  sf.postMessage(message)
-}
+app.use('/graphql', bodyParser.json(), graphqlExpress(request => ({schema})))
+app.get('/graphiql', graphiqlExpress({endpointURL: '/graphql'}));
 
-sf.onmessage = function(event) {
-  console.log({event})
-};
-
-sf.postMessage("uci")
-
-app.get('/', (req, res) => {
-  // set an option
-  pm('setoption name Hash value 32')
-  pm('setoption name Contempt value 0')
-  // pm('isready')
-  pm('isready')
-  // load game
-  res.send("Hello World!")
-})
-
-app.listen(3000, () => console.log("server ready"))
+app.listen(PORT, () => {
+  console.log("Juice server is ready")
+});
