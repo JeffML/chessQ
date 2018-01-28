@@ -8,8 +8,12 @@ const app = express();
 const graphiql = true;
 
 app.use('/graphql', bodyParser.json(), graphqlExpress(request => ({schema})))
-app.get('/graphiql', graphiqlExpress({endpointURL: '/graphql'}));
+app.get('/graphiql', graphiqlExpress({endpointURL: '/graphql', query: `# Welcome to chessQ
+query registerLater {
+  registerLater(engineId: "Flibbit")
+}
+`}));
 
 app.listen(PORT, () => {
-  console.log("Juice server is ready")
+  console.log("chessQ server is ready")
 });

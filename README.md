@@ -1,6 +1,10 @@
 # chessQ
 Chess quality analyzer, using UCI, RabbitMQ, and GraphQL
 
+## Where are we?
+Need to write resolver using https://github.com/nmrugg/stockfish.js;
+Later, write resolvers using node-uci. Determine which root resolver to use by 'embedded' || 'node_uci' sysvar(?) with exe path
+
 
 # Notes
 * 'option name Hash type spin default 16 min 1 max 2048'

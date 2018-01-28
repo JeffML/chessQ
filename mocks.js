@@ -3,5 +3,5 @@ import RandExp from 'randexp';
 import {MockList} from 'graphql-tools';
 
 export default {
-  Int: () => casual.integer(0)
+  String: () => casual.sentence
 }

@@ -2,9 +2,9 @@ import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools'
 
 import PreambleSchema from './preamble'
 
-import {mocks} from './mocks'
+import mocks from './mocks'
 
-const JuiceSchema = [`
+const ChessQSchema = [`
   type Query {
     # createEngine: EngineResponse
     # uci(engineId: String!): UciResponse!
@@ -17,26 +17,17 @@ const JuiceSchema = [`
 `]
 
 const schema = [
-  ...JuiceSchema,
+  ...ChessQSchema,
   // ...PreambleSchema
 
 ]
 
 const options = {
   typeDefs: schema,
-  resolvers: {
-    Query: {
-      registerLater: (_, {engineId}) => {
-        return "ok"
-      }
-    }
-  }
+  resolvers: {}
 }
 
 const executableSchema = makeExecutableSchema(options);
-addMockFunctionsToSchema({
-  schema: executableSchema,
-  /* mocks: mocks */
-})
+addMockFunctionsToSchema({schema: executableSchema, mocks})
 
 export default executableSchema;
