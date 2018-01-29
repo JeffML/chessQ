@@ -6,8 +6,8 @@ import mocks from './mocks'
 
 const ChessQSchema = [`
   type Query {
-    # createEngine: EngineResponse
-    # uci(engineId: String!): UciResponse!
+    createEngine: EngineResponse
+    uci(engineId: String!): UciResponse!
     register(engineId: String!, name: String, code: String): String
     registerLater(engineId: String!): String
   }
@@ -18,7 +18,7 @@ const ChessQSchema = [`
 
 const schema = [
   ...ChessQSchema,
-  // ...PreambleSchema
+  ...PreambleSchema
 
 ]
 
