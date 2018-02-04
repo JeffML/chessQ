@@ -28,5 +28,16 @@ export default {
     type: function() {
       return optionTypes[this.__typename]
     }
-  })
+  }),
+  SpinOption: () => ({
+    value: casual.integer(0, 126),
+    min: 0,
+    max: 126
+  }),
+  CheckOption: () => ({value: casual.boolean}),
+  ComboOption: () => ({
+    value: casual.random_element(["foo", "bar", "baz"]),
+    options: ["foo", "bar", "baz"]
+  }),
+  uciokay: () => true
 }

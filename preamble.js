@@ -51,6 +51,7 @@ const typeDefs = `
   type UciResponse {
     identity: UciIdentity!
     options : [Option]
+    uciokay : Boolean!
   }
 `
 export default[typeDefs]
