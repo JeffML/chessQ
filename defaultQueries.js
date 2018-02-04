@@ -46,4 +46,13 @@ query uci {
     uciokay
   }
 }
+
+query setOptions {
+  setComboOption(engineId: "2f47aee8-a19c-4099-b9b8-45bb210eb751", name: "Foo", value: "Flum")
+  setSpinOption(engineId: "2f47aee8-a19c-4099-b9b8-45bb210eb751", name: "Flum", value: 42)
+  setButtonOption(engineId: "2f47aee8-a19c-4099-b9b8-45bb210eb751", name: "Flim")
+  setCheckOption(engineId: "2f47aee8-a19c-4099-b9b8-45bb210eb751", name: "Fazzle", value: false)
+}
+
+query quit{quit(engineId: "2f47aee8-a19c-4099-b9b8-45bb210eb751")}
 `

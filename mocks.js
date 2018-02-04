@@ -20,7 +20,8 @@ export default {
       name: casual.title,
       author: casual.full_name
     },
-    options: () => new MockList([2, 5])
+    options: () => new MockList([2, 5]),
+    uciokay: () => true
   }),
   Option: () => ({
     __typename: casual.random_element(["SpinOption", "ButtonOption", "CheckOption", "ComboOption"]),
@@ -38,6 +39,5 @@ export default {
   ComboOption: () => ({
     value: casual.random_element(["foo", "bar", "baz"]),
     options: ["foo", "bar", "baz"]
-  }),
-  uciokay: () => true
+  })
 }

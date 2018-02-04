@@ -1,17 +1,4 @@
 const typeDefs = `
-  enum eEngineState {
-    CREATED
-    INITIALIZED
-    READY
-    RUNNING
-    STOPPED
-  }
-
-  type EngineResponse {
-    engineId: String!
-    state: eEngineState!
-  }
-
   type UciIdentity {
     name: String!
     author: String!
