@@ -36,7 +36,7 @@ const schema = [
   ...ReadySchema
 ]
 
-const TOPIC = 'something_changed'
+const TOPIC = 'info'
 
 const options = {
   typeDefs: schema,
@@ -55,9 +55,14 @@ const options = {
     },
     Move: MoveScalar,
     Subscription: {
-      somethingChanged: {
-        //subscribe: withFilter(() => pubsub.asyncIterator(TOPIC), (payload, variables) => payload.somethingChanged.id === variables.relevantId)
-        subscribe: () => pubsub.asyncIterator(TOPIC)
+      info: {
+        subscribe: withFilter(() => pubsub.asyncIterator(TOPIC), (payload, variables) => {
+          return true
+        }) //payload.somethingChanged.id === variables.relevantId)
+        // subscribe: () => {
+        //   console.log('subscribing to ', TOPIC);
+        //   return pubsub.asyncIterator(TOPIC);
+        // }
       }
     }
   }
@@ -65,5 +70,4 @@ const options = {
 
 const executableSchema = makeExecutableSchema(options);
 addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
-
 export default executableSchema;

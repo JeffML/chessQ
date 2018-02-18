@@ -19,11 +19,7 @@ const typeDefs = `
   scalar Move
 
   type Subscription {
-    somethingChanged: Result
-  }
-
-  type Result {
-    id: String!
+    info: String
   }
 
   extend type Query {

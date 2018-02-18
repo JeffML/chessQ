@@ -10,13 +10,14 @@
     "express": "^4.16.2",
     "graphql": "^0.12.3",
     "graphql-subscriptions": "^0.5.7",
-    "graphql-tag": "^2.6.1",
-    "graphql-tools": "^2.19.0",
-    "stockfish": "^8.0.0"
+    "graphql-tag": "^2.7.3",
+    "graphql-tools": "^2.21.0",
+    "stockfish": "^8.0.0",
+    "subscriptions-transport-ws": "^0.9.5"
   },
   "devDependencies": {
     "casual": "^1.5.19",
-    "randexp": "^0.4.6"
+    "randexp": "^0.4.8"
   },
   "scripts": {
     "dev": "nodemon app.js --exec babel-node --presets env",
