@@ -9,7 +9,7 @@ const app = express();
 const graphiql = true;
 
 app.use('/graphql', bodyParser.json(), graphqlExpress(request => ({schema})))
-app.get('/graphiql', graphiqlExpress({endpointURL: '/graphql', query: defaultQueries}));
+app.get('/graphiql', graphiqlExpress({endpointURL: '/graphql', query: defaultQueries, subscriptionsEndpoint: `ws://localhost:3001/subscriptions`}));
 
 app.listen(PORT, () => {
   console.log("chessQ server is ready")

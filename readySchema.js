@@ -7,7 +7,7 @@ const typeDefs = `
     STOPPED
   }
 
-  type Position {
+  input PositionInput {
     fenString: String
   }
 
@@ -18,10 +18,18 @@ const typeDefs = `
 
   scalar Move
 
-  extend type Query {
-    ucinewgame(engineId: String!): String!
-    position(engineId: String!, position: Position, moves: [Move]): String!
+  type Subscription {
+    somethingChanged: Result
   }
 
+  type Result {
+    id: String!
+  }
+
+  extend type Query {
+    ucinewgame(engineId: String!): String!
+    position(engineId: String!, position: PositionInput!, moves: [Move]): String!
+  }
 `
+
 export default[typeDefs]

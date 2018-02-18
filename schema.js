@@ -6,6 +6,10 @@ import ReadySchema from './readySchema'
 import mocks from './mocks'
 import MoveScalar from './moveScalar'
 
+import {PubSub, withFilter} from 'graphql-subscriptions';
+
+const pubsub = new PubSub();
+
 const ChessQSchema = [`
   type Query {
     createEngine: EngineResponse
@@ -18,9 +22,11 @@ const ChessQSchema = [`
     setComboOption(engineId: String!, name: String!, value: String!): String!
     quit(engineId: String!): String!
     isready(engineId: String!): String!
+    go: String!
   }
   schema {
     query: Query
+    subscription: Subscription
   }
 `]
 
@@ -30,13 +36,30 @@ const schema = [
   ...ReadySchema
 ]
 
+const TOPIC = 'something_changed'
+
 const options = {
   typeDefs: schema,
   resolvers: {
     Query: {
-      isready: () => "readyok" // TODO: mocked
+      isready: () => "readyok", // TODO: mocked
+      go: () => {
+        console.log('publishing: ', TOPIC)
+        pubsub.publish(TOPIC, {
+          somethingChanged: {
+            id: "123"
+          }
+        })
+        return "going..."
+      }
     },
-    Move: MoveScalar
+    Move: MoveScalar,
+    Subscription: {
+      somethingChanged: {
+        //subscribe: withFilter(() => pubsub.asyncIterator(TOPIC), (payload, variables) => payload.somethingChanged.id === variables.relevantId)
+        subscribe: () => pubsub.asyncIterator(TOPIC)
+      }
+    }
   }
 }
 
