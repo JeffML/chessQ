@@ -18,10 +18,6 @@ const typeDefs = `
 
   scalar Move
 
-  type Subscription {
-    info: String
-  }
-
   extend type Query {
     ucinewgame(engineId: String!): String!
     position(engineId: String!, position: PositionInput!, moves: [Move]): String!

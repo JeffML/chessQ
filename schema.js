@@ -22,11 +22,18 @@ const ChessQSchema = [`
     setComboOption(engineId: String!, name: String!, value: String!): String!
     quit(engineId: String!): String!
     isready(engineId: String!): String!
+
+  }
+  type Mutation {
     go: String!
   }
-  schema {
-    query: Query
-    subscription: Subscription
+
+  type SomethingChanged {
+    id: String!
+  }
+
+  type Subscription {
+    info: SomethingChanged
   }
 `]
 
@@ -43,26 +50,24 @@ const options = {
   resolvers: {
     Query: {
       isready: () => "readyok", // TODO: mocked
+    },
+    Move: MoveScalar,
+    Mutation: {
       go: () => {
         console.log('publishing: ', TOPIC)
         pubsub.publish(TOPIC, {
-          somethingChanged: {
-            id: "123"
+          info: {
+            id: "1234"
           }
         })
         return "going..."
       }
     },
-    Move: MoveScalar,
     Subscription: {
       info: {
         subscribe: withFilter(() => pubsub.asyncIterator(TOPIC), (payload, variables) => {
           return true
-        }) //payload.somethingChanged.id === variables.relevantId)
-        // subscribe: () => {
-        //   console.log('subscribing to ', TOPIC);
-        //   return pubsub.asyncIterator(TOPIC);
-        // }
+        })
       }
     }
   }

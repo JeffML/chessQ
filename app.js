@@ -14,22 +14,10 @@ const app = express();
 
 const ws = createServer(app);
 
-const graphiql = true;
-
-app.use('/graphql', bodyParser.json(), graphqlExpress(request => ({schema})))
-const opts = {
-  endpointURL: '/graphql',
-  query: defaultQueries,
-  subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
-};
-app.get('/graphiql', graphiqlExpress(opts));
-
-// app.listen(PORT, () => {
-//   console.log("chessQ server is ready")
-// });
+app.use('/graphql', bodyParser.json(), graphqlExpress({schema}))
 
 ws.listen(PORT, () => {
-  console.log(`GraphQL Server is now running on http://localhost:${PORT}`);
+  console.log(`chessQ Server is now running on http://localhost:${PORT}`);
   // Set up the WebSocket for handling GraphQL subscriptions
   new SubscriptionServer({
     execute,
@@ -40,3 +28,10 @@ ws.listen(PORT, () => {
     path: '/subscriptions'
   });
 });
+
+const opts = {
+  endpointURL: '/graphql',
+  // query: defaultQueries,
+  subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`
+};
+app.get('/graphiql', graphiqlExpress(opts));
