@@ -8,6 +8,8 @@ import MoveScalar from './moveScalar'
 
 import {PubSub, withFilter} from 'graphql-subscriptions';
 
+import InfoGenerator from './InfoGenerator'
+
 const pubsub = new PubSub();
 
 const ChessQSchema = [`
@@ -25,15 +27,36 @@ const ChessQSchema = [`
 
   }
   type Mutation {
-    go: String!
+    go: BestMove!
   }
 
-  type SomethingChanged {
-    id: String!
+  type Score {
+    cp: Int!
+    depth: Int!
+    nodes: Int!
+    time: Int!
+    pv: [Move!]!
   }
+
+  type Depth {
+    depth: Int!
+    seldepth: Int!
+    nodes: Int
+  }
+
+  type Nps {
+    value: Int!
+  }
+
+  type BestMove {
+    value: Move!,
+    ponder: Move
+  }
+
+  union Info = Score | Depth | Nps | BestMove
 
   type Subscription {
-    info: SomethingChanged
+    info: Info
   }
 `]
 
@@ -45,6 +68,12 @@ const schema = [
 
 const TOPIC = 'info'
 
+function sleep(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
+
 const options = {
   typeDefs: schema,
   resolvers: {
@@ -53,14 +82,14 @@ const options = {
     },
     Move: MoveScalar,
     Mutation: {
-      go: () => {
-        console.log('publishing: ', TOPIC)
-        pubsub.publish(TOPIC, {
-          info: {
-            id: "1234"
-          }
-        })
-        return "going..."
+      go: async () => {
+        let info;
+        for (info of InfoGenerator()) {
+          console.log(info.__typename)
+          pubsub.publish(TOPIC, {info})
+          await sleep(400)
+        }
+        return info;
       }
     },
     Subscription: {
