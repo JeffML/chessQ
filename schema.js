@@ -24,7 +24,6 @@ const ChessQSchema = [`
     setComboOption(engineId: String!, name: String!, value: String!): String!
     quit(engineId: String!): String!
     isready(engineId: String!): String!
-
   }
   type Mutation {
     go: BestMove!
@@ -87,7 +86,7 @@ const options = {
         for (info of InfoGenerator()) {
           console.log(info.__typename)
           pubsub.publish(TOPIC, {info})
-          await sleep(400)
+          await sleep(3000)
         }
         return info;
       }
