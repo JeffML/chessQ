@@ -1,42 +1,42 @@
 {
-  "name": "chessq",
-  "version": "1.0.0",
-  "description": "Chess game analyser",
-  "main": "index.js",
-  "dependencies": {
-    "apollo-server-express": "^1.3.2",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "express": "^4.16.2",
-    "graphql": "^0.12.3",
-    "graphql-subscriptions": "^0.5.7",
-    "graphql-tag": "^2.7.3",
-    "graphql-tools": "^2.21.0",
-    "stockfish": "^8.0.0",
-    "subscriptions-transport-ws": "^0.9.5"
-  },
-  "devDependencies": {
-    "casual": "^1.5.19",
-    "randexp": "^0.4.8"
-  },
-  "scripts": {
-    "dev": "nodemon app.js --exec babel-node --presets env",
-    "dev2": "babel-node --presets env app.js",
-    "bare": "node node_modules/stockfish/src/stockfish.js",
-    "test": "mocha test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JeffML/chessQ.git"
-  },
-  "keywords": [
-    "chess",
-    "analysis"
-  ],
-  "author": "Jeff M. Lowery",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/JeffML/chessQ/issues"
-  },
-  "homepage": "https://github.com/JeffML/chessQ#readme"
+	"name": "chessq",
+	"version": "1.0.0",
+	"description": "Chess game analyser",
+	"main": "index.js",
+	"dependencies": {
+		"apollo-server-express": "^1.3.2",
+		"babel-cli": "^6.26.0",
+		"babel-preset-env": "^1.6.1",
+		"express": "^4.16.2",
+		"graphql": "^0.12.3",
+		"graphql-subscriptions": "^0.5.7",
+		"graphql-tag": "^2.7.3",
+		"graphql-tools": "^2.21.0",
+		"stockfish": "^8.0.0",
+		"subscriptions-transport-ws": "^0.9.5"
+	},
+	"devDependencies": {
+		"casual": "^1.5.19",
+		"randexp": "^0.4.8"
+	},
+	"scripts": {
+		"dev": "nodemon app.js --exec babel-node --presets env",
+		"dev2": "babel-node --presets env app.js",
+		"bare": "node node_modules/stockfish/src/stockfish.js",
+		"test": "mocha test"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/JeffML/chessQ.git"
+	},
+	"keywords": [
+		"chess",
+		"analysis"
+	],
+	"author": "Jeff M. Lowery",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/JeffML/chessQ/issues"
+	},
+	"homepage": "https://github.com/JeffML/chessQ#readme"
 }
