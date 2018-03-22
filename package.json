@@ -1,6 +1,6 @@
 {
 	"name": "chessq",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Chess game analyser",
 	"main": "index.js",
 	"dependencies": {
