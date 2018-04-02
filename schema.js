@@ -4,13 +4,8 @@ import OptionsSchema from './optionsSchema'
 import ReadySchema from './readySchema'
 
 import mocks from './mocks'
-import MoveScalar from './moveScalar'
-
-import {PubSub, withFilter} from 'graphql-subscriptions';
-
 import InfoGenerator from './InfoGenerator'
-
-const pubsub = new PubSub();
+import resolvers from './resolvers'
 
 const ChessQSchema = [`
   type Query {
@@ -59,7 +54,7 @@ const ChessQSchema = [`
   }
 `]
 
-const schema = [
+const typeDefs = [
   ...ChessQSchema,
   ...OptionsSchema,
   ...ReadySchema
@@ -74,33 +69,10 @@ function sleep(ms) {
 }
 
 const options = {
-  typeDefs: schema,
-  resolvers: {
-    Query: {
-      isready: () => "readyok", // TODO: mocked
-    },
-    Move: MoveScalar,
-    Mutation: {
-      go: async () => {
-        let info;
-        for (info of InfoGenerator()) {
-          console.log(info.__typename)
-          pubsub.publish(TOPIC, {info})
-          await sleep(3000)
-        }
-        return info;
-      }
-    },
-    Subscription: {
-      info: {
-        subscribe: withFilter(() => pubsub.asyncIterator(TOPIC), (payload, variables) => {
-          return true
-        })
-      }
-    }
-  }
+  typeDefs,
+  resolvers
 }
 
 const executableSchema = makeExecutableSchema(options);
-addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
+//addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
 export default executableSchema;
