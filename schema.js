@@ -1,4 +1,5 @@
 import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools'
+import fs from 'fs';
 
 import OptionsSchema from './optionsSchema'
 import ReadySchema from './readySchema'
@@ -9,18 +10,24 @@ import resolvers from './resolvers'
 
 const ChessQSchema = [`
   type Query {
+    version: String!
     createEngine: EngineResponse
-    uci(engineId: String!): UciResponse!
-    register(engineId: String!, name: String, code: String): String
-    registerLater(engineId: String!): String
-    setSpinOption(engineId: String!, name: String!, value: Int!): String!
-    setButtonOption(engineId: String!, name: String!): String!
-    setCheckOption(engineId: String!, name: String!, value: Boolean!): String!
-    setComboOption(engineId: String!, name: String!, value: String!): String!
-    quit(engineId: String!): String!
-    isready(engineId: String!): String!
   }
+
   type Mutation {
+    Engine(id: String!) : EngineOps
+  }
+
+  type EngineOps {
+    uci: UciResponse!
+    register(name: String, code: String): String
+    registerLater: String
+    setSpinOption(name: String!, value: Int!): String!
+    setButtonOption(name: String!): String!
+    setCheckOption(name: String!, value: Boolean!): String!
+    setComboOption(name: String!, value: String!): String!
+    quit: String!
+    isready: String!
     go: BestMove!
   }
 
@@ -74,5 +81,5 @@ const options = {
 }
 
 const executableSchema = makeExecutableSchema(options);
-//addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
+// addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
 export default executableSchema;

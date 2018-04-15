@@ -21,7 +21,7 @@
 	},
 	"scripts": {
 		"dev": "nodemon app.js --exec babel-node --presets env",
-		"dev2": "babel-node --presets env app.js",
+		"debug": "babel-node --inspect --presets env app.js -s",
 		"bare": "node node_modules/stockfish/src/stockfish.js",
 		"test": "mocha test"
 	},
