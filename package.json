@@ -12,6 +12,7 @@
 		"graphql-subscriptions": "^0.5.7",
 		"graphql-tag": "^2.7.3",
 		"graphql-tools": "^2.21.0",
+		"lodash": "^4.17.5",
 		"stockfish": "^8.0.0",
 		"subscriptions-transport-ws": "^0.9.5"
 	},
@@ -21,7 +22,7 @@
 	},
 	"scripts": {
 		"dev": "nodemon app.js --exec babel-node --presets env",
-		"debug": "babel-node --inspect --presets env app.js -s",
+		"debug": "babel-node --inspect --presets env app.js",
 		"bare": "node node_modules/stockfish/src/stockfish.js",
 		"test": "mocha test"
 	},

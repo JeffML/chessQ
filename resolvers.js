@@ -1,6 +1,7 @@
 import MoveScalar from './moveScalar'
 import casual from 'casual'
 import {PubSub, withFilter} from 'graphql-subscriptions';
+import {capitalize} from 'lodash';
 const pubsub = new PubSub();
 // const stockfish = require("stockfish");
 import stockfish from 'stockfish'
@@ -37,7 +38,8 @@ class EngineQueue {
       const worker = {
         uuid: casual.uuid,
         engine: stockfish(),
-        lastUsed: new Date()
+        lastUsed: new Date(),
+        beforeUci: true
       }
 
       worker.responseStack = [];
@@ -49,19 +51,31 @@ class EngineQueue {
               resolve(worker.responseStack.shift())
               clearInterval(itvl)
             }
-          }, 200)
+          }, 20)
         })
       }
 
       worker.engine.onmessage = function(line) {
-        console.log("receiving:", line)
-        worker.responseStack.push(line)
+        // console.log("receiving:", line)
+        if (worker.beforeUci) {
+          // do nothing
+        } else {
+          worker.responseStack.push(line)
+        }
       }
 
-      worker.sendAndAwait = async function(message) {
-        console.log("posting:", message)
+      worker.sendAndAwait = async function(message, terminator) {
+        // console.log("posting:", message)
         worker.engine.postMessage(message)
-        return await worker.getResponse();
+        const responses = [];
+        var response;
+
+        do {
+          response = await worker.getResponse();
+          responses.push(response)
+        } while (response !== terminator)
+
+        return responses;
       }
 
       this.queue[worker.uuid] = worker;
@@ -72,14 +86,67 @@ class EngineQueue {
   }
 
   async uci(uuid) {
-    var resp = await this.queue[uuid].sendAndAwait("uci")
-    console.log({resp})
-    return {
-      identity: {
-        name: "moop",
-        author: 'flum!'
+    const worker = this.queue[uuid];
+    if (!worker) {
+      throw Error(`No worker found for ${uuid}`)
+    }
+    // console.log("uuid is", worker.uuid)
+    worker.beforeUci = false;
+    const responses = await worker.sendAndAwait("uci", "uciok")
+    return this.parseUciResponses(responses)
+  }
+
+  // parse the response strings into JSON
+  parseUciResponses(responses) {
+
+    function parseOption(arr) {
+      const iType = arr.indexOf('type');
+      const optionName = arr.slice(0, iType).join(" ")
+
+      const rest = arr.slice(iType)
+      let __typename = capitalize(arr[iType + 1]) + "Option";
+
+      const optionParams = {};
+      for (let i = 0; i < rest.length; i += 2) {
+        optionParams[rest[i]] = rest[i + 1]
       }
-    };
+
+      const retVal = Object.assign({
+        name: optionName,
+        __typename
+      }, optionParams)
+
+      console.error({retVal})
+      return retVal
+    }
+
+    let res = {
+      identity: {},
+      options: []
+    }
+
+    responses.forEach(r => {
+      let rarr = r.split(" ")
+      const [id, type] = rarr;
+      const rest = rarr.slice(2);
+
+      // console.log({id, type, rest})
+
+      switch (id) {
+        case "id":
+          res.identity = res.identity || {};
+          res.identity[type] = rest.join(" ");
+          break;
+        case "option":
+          res.options.push(parseOption(rest))
+          break;
+        default:
+          break
+      }
+    });
+
+    console.error({res})
+    return res;
   }
 }
 
