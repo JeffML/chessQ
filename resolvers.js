@@ -34,7 +34,7 @@ class EngineQueue {
 
   /* request an instance */
   requestEngine() {
-    if (Object.keys(this.queue) < this.length) {
+    if (Object.keys(this.queue).length < this.length) {
       const worker = {
         uuid: casual.uuid,
         engine: stockfish(),
@@ -93,7 +93,8 @@ class EngineQueue {
     // console.log("uuid is", worker.uuid)
     worker.beforeUci = false;
     const responses = await worker.sendAndAwait("uci", "uciok")
-    return this.parseUciResponses(responses)
+    worker.options = this.parseUciResponses(responses)
+    return worker.options;
   }
 
   // parse the response strings into JSON
@@ -116,7 +117,9 @@ class EngineQueue {
         __typename
       }, optionParams)
 
-      console.error({retVal})
+      if (retVal.default) {
+        retVal.value = retVal.default
+      };
       return retVal
     }
 
