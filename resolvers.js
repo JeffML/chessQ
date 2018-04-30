@@ -36,7 +36,9 @@ class EngineQueue {
   requestEngine() {
     if (Object.keys(this.queue).length < this.length) {
       const worker = {
-        uuid: casual.uuid,
+        uuid: process.env.MOCK_UUID
+          ? "1"
+          : casual.uuid,
         engine: stockfish(),
         lastUsed: new Date(),
         beforeUci: true
@@ -76,6 +78,12 @@ class EngineQueue {
         } while (response !== terminator)
 
         return responses;
+      }
+
+      worker.send = function(message) {
+        console.log(`sending ${message}`)
+        worker.engine.postMessage(message)
+        return "acknowledged";
       }
 
       this.queue[worker.uuid] = worker;
@@ -151,12 +159,23 @@ class EngineQueue {
     console.error({res})
     return res;
   }
+
+  async setSpinOption(uuid, name, value) {
+    const worker = this.queue[uuid];
+    if (!worker) {
+      throw Error(`No worker found for ${uuid}`)
+    }
+
+    worker.optionSent = true;
+    return worker.send(`setoption name ${name} value ${value}`)
+  }
 }
 
 const engineQueue = new EngineQueue({length: 5});
 
 const EngineOps = (id) => ({
   uci: async () => await engineQueue.uci(id),
+  setSpinOption: async ({name, value}) => await engineQueue.setSpinOption(id, name, value),
   isready: () => "readyok", // TODO: mocked
   go: async () => {
     let info;

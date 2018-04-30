@@ -1,28 +1,32 @@
 # chessQ
+
 Chess quality analyzer, using UCI, graphql-subscriptions, and GraphQL
 
 ## Where are we?
+  Need to deal with setoption:  no response on success, response on failure
+  * between uciok (server) and isready (client) command
+    * gather error lines, send on isready
+
+
 Need to write resolver using https://github.com/nmrugg/stockfish.js;
   -- "You must set onmessage" -- see https://github.com/nmrugg/stockfish.js/blob/master/example/simple_node.js
-  -- no way to tie responses to requests in onmessage(), so will need to change
-    -- 4 types of response/request
-      -- request, no response
-      -- request, one response
-      -- request, multiple responses with end tag
-      -- request, multiple responses with end request (go/stop)
-    -- create response listener for each request
-      -- request only
-      -- request/response(s)
-      -- request/responses/request <-- maybe: go->responses...->bestmove | stop/bestmove
+  * no way to tie responses to requests in onmessage(), so will need to change
+    * 5 types of response/request
+      * request, no response _or error response_
+        * setoption
+          * no response if ok
+          * error response if option not recognized:
+           ```
+              setoption name Moo Cow value 3
+              No such option: Moo Cow
+           ```        
+      * request, one response
+      * request, multiple responses with end tag
+      * request, multiple responses with end request (go/stop)
+    * create response listener for each request
+      * request only
+      * request/response(s)
+      * request/responses/request <-- maybe: go->responses...->bestmove | stop/bestmove
   Query to Mutation as some point.
 
 Later, write resolvers using node-uci. Determine which root resolver to use by 'embedded' || 'node_uci' sysvar(?) with exe path
-
-
-# Notes
-* 'option name Hash type spin default 16 min 1 max 2048'
-  * lies; 64 seems to be the max
-* go
-  * graphiql doesn't seem happy being both an event emitter and receiver
-    * once sub is defined (not even run), you can't define (let alone execute) any other query or mutations
-    * but... you can open another graphiql browser window and execute mutations. so, okay.
