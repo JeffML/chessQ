@@ -41,7 +41,9 @@ class EngineQueue {
           : casual.uuid,
         engine: stockfish(),
         lastUsed: new Date(),
-        beforeUci: true
+        beforeUci: true,
+        optionSent: false,
+        optionErrors: []
       }
 
       worker.responseStack = [];
@@ -61,6 +63,8 @@ class EngineQueue {
         // console.log("receiving:", line)
         if (worker.beforeUci) {
           // do nothing
+        } else if (worker.optionSent && line !== "readyok") {
+          worker.optionErrors.push(line)
         } else {
           worker.responseStack.push(line)
         }
@@ -103,6 +107,17 @@ class EngineQueue {
     const responses = await worker.sendAndAwait("uci", "uciok")
     worker.options = this.parseUciResponses(responses)
     return worker.options;
+  }
+
+  async isReady(uuid) {
+    worker.optionSent = false;
+    const response = await worker.sendAndAwait("isready", "readyok");
+    const retVal = {
+      errors: worker.optionErrors,
+      response
+    }
+    worker.optionErrors = []
+    return retVal;
   }
 
   // parse the response strings into JSON
@@ -176,7 +191,7 @@ const engineQueue = new EngineQueue({length: 5});
 const EngineOps = (id) => ({
   uci: async () => await engineQueue.uci(id),
   setSpinOption: async ({name, value}) => await engineQueue.setSpinOption(id, name, value),
-  isready: () => "readyok", // TODO: mocked
+  isready: () => async () => await engineQueue.isReady(id),
   go: async () => {
     let info;
     for (info of InfoGenerator()) {

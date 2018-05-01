@@ -27,8 +27,13 @@ const ChessQSchema = [`
     setCheckOption(name: String!, value: Boolean!): String!
     setComboOption(name: String!, value: String!): String!
     quit: String!
-    isready: String!
+    isready: ReadyResponse!
     go: BestMove!
+  }
+
+  type ReadyResponse {
+    errors: [String]
+    response: String!
   }
 
   type Score {
