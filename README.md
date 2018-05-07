@@ -6,6 +6,7 @@ Chess quality analyzer, using UCI, graphql-subscriptions, and GraphQL
   Need to deal with setoption:  no response on success, response on failure
   * between uciok (server) and isready (client) command
     * gather error lines, send on isready
+  * ok, now test
 
 
 Need to write resolver using https://github.com/nmrugg/stockfish.js;

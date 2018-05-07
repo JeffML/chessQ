@@ -109,17 +109,6 @@ class EngineQueue {
     return worker.options;
   }
 
-  async isReady(uuid) {
-    worker.optionSent = false;
-    const response = await worker.sendAndAwait("isready", "readyok");
-    const retVal = {
-      errors: worker.optionErrors,
-      response
-    }
-    worker.optionErrors = []
-    return retVal;
-  }
-
   // parse the response strings into JSON
   parseUciResponses(responses) {
 
@@ -171,7 +160,6 @@ class EngineQueue {
       }
     });
 
-    console.error({res})
     return res;
   }
 
@@ -184,6 +172,30 @@ class EngineQueue {
     worker.optionSent = true;
     return worker.send(`setoption name ${name} value ${value}`)
   }
+
+  // async isReady(uuid) {
+  //   return ({errors: ["foo"], response: "readyok"})
+  // }
+
+  async isReady(uuid) {
+    console.log("isReady???", uuid)
+    const worker = this.queue[uuid];
+    if (!worker) {
+      throw Error(`No worker found for ${uuid}`)
+    }
+
+    worker.optionSent = false;
+    const response = await worker.sendAndAwait("isready", "readyok");
+    console.log({response})
+
+    const retVal = {
+      errors: worker.optionErrors,
+      response: response[0]
+    }
+    worker.optionErrors = []
+    return retVal;
+  }
+
 }
 
 const engineQueue = new EngineQueue({length: 5});
@@ -191,7 +203,7 @@ const engineQueue = new EngineQueue({length: 5});
 const EngineOps = (id) => ({
   uci: async () => await engineQueue.uci(id),
   setSpinOption: async ({name, value}) => await engineQueue.setSpinOption(id, name, value),
-  isready: () => async () => await engineQueue.isReady(id),
+  isready: async () => await engineQueue.isReady(id),
   go: async () => {
     let info;
     for (info of InfoGenerator()) {
