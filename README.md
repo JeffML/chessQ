@@ -1,4 +1,5 @@
 # chessQ
+![build status](https://travis-ci.org/JeffML/chessQ.svg?branch=master)
 
 Chess quality analyzer, using UCI, graphql-subscriptions, and GraphQL
 
