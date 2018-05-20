@@ -2,11 +2,11 @@ import MoveScalar from './moveScalar'
 import {PubSub, withFilter} from 'graphql-subscriptions';
 
 const pubsub = new PubSub();
-import EngineQueue, {EngineOps} from './engine/queue'
+import EngineQueue from './engine/queue'
 
 const engineQueue = new EngineQueue({length: 5});
 
-EngineOps = (id) => ({
+const EngineOps = (id) => ({
   uci: async () => await engineQueue.uci(id),
   setSpinOption: async ({name, value}) => await engineQueue.setSpinOption(id, name, value),
   isready: async () => await engineQueue.isReady(id),

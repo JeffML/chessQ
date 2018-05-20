@@ -32,7 +32,7 @@ const ChessQSchema = [`
   }
 
   type ReadyResponse {
-    errors: [String]
+    errors: [String]!
     response: String!
   }
 
