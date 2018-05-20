@@ -207,4 +207,4 @@ class EngineQueue {
 
 }
 
-export default EngineQueue;
+export default EngineQueue
