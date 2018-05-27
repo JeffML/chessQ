@@ -1,11 +1,14 @@
 # chessQ
 ![build status](https://travis-ci.org/JeffML/chessQ.svg?branch=master)
 
-Chess quality analyzer, using UCI, graphql-subscriptions, and GraphQL
+GraphQL wrapper around Universal Chess Interface
 
-## Where are we?
+## Where it's at
   * writing tests
-    -- setopion tests
+
+## TODO
+  * implement other option types
+  * throw workers in proper Node.js worker processes (like from threads.js)
 
 
 ## node-uci
