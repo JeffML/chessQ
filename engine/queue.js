@@ -66,7 +66,7 @@ class EngineQueue {
       }
 
       worker.engine.onmessage = function(line) {
-        // console.log("receiving:", line)
+        console.log("receiving:", line)
         if (worker.beforeUci) {
           // do nothing
         } else if (worker.optionSent && line !== "readyok") {
@@ -77,10 +77,10 @@ class EngineQueue {
       }
 
       worker.sendAndAwait = async function(message, terminator) {
-        // console.log("posting:", message)
-        worker.engine.postMessage(message)
         const responses = [];
         var response;
+        console.log("posting:", message)
+        worker.engine.postMessage(message)
 
         do {
           response = await worker.getResponse();
@@ -187,7 +187,6 @@ class EngineQueue {
   }
 
   async isReady(uuid) {
-    console.log("isReady???", uuid)
     const worker = this.queue[uuid];
     if (!worker) {
       throw Error(`No worker found for ${uuid}`)
@@ -195,7 +194,6 @@ class EngineQueue {
 
     worker.optionSent = false;
     const response = await worker.sendAndAwait("isready", "readyok");
-    console.log({response})
 
     const retVal = {
       errors: worker.optionErrors,

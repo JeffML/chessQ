@@ -3,6 +3,7 @@ import {PubSub, withFilter} from 'graphql-subscriptions';
 
 const pubsub = new PubSub();
 import EngineQueue from './engine/queue'
+import InfoGenerator from './test/tasks/InfoGenerator'
 
 const engineQueue = new EngineQueue({length: 5});
 

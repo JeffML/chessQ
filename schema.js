@@ -4,8 +4,6 @@ import fs from 'fs';
 import OptionsSchema from './optionsSchema'
 import ReadySchema from './readySchema'
 
-import mocks from './test/mocks'
-import InfoGenerator from './InfoGenerator'
 import resolvers from './resolvers'
 
 const ChessQSchema = [`
