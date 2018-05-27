@@ -72,6 +72,7 @@ class EngineQueue {
         } else if (worker.optionSent && line !== "readyok") {
           worker.optionErrors.push(line)
         } else {
+          worker.optionSent = false;
           worker.responseStack.push(line)
         }
       }
@@ -192,7 +193,6 @@ class EngineQueue {
       throw Error(`No worker found for ${uuid}`)
     }
 
-    worker.optionSent = false;
     const response = await worker.sendAndAwait("isready", "readyok");
 
     const retVal = {
