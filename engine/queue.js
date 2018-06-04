@@ -49,7 +49,8 @@ class EngineQueue {
         lastUsed: new Date(),
         beforeUci: true,
         optionSent: false,
-        optionErrors: []
+        optionErrors: [],
+        optionInfo: []
       }
 
       worker.responseStack = [];
@@ -66,11 +67,15 @@ class EngineQueue {
       }
 
       worker.engine.onmessage = function(line) {
-        console.log("receiving:", line)
+        // console.log("receiving:", line)
         if (worker.beforeUci) {
           // do nothing
         } else if (worker.optionSent && line !== "readyok") {
-          worker.optionErrors.push(line)
+          if (line.startsWith('info')) {
+            worker.optionInfo.push(line)
+          } else {
+            worker.optionErrors.push(line)
+          }
         } else {
           worker.optionSent = false;
           worker.responseStack.push(line)
@@ -177,12 +182,34 @@ class EngineQueue {
     return res;
   }
 
-  async setSpinOption(uuid, name, value) {
+  getWorker(uuid) {
     const worker = this.queue[uuid];
     if (!worker) {
       throw Error(`No worker found for ${uuid}`)
     }
+    return worker;
+  }
 
+  async setSpinOption(uuid, name, value) {
+    const worker = this.getWorker(uuid)
+    worker.optionSent = true;
+    return worker.send(`setoption name ${name} value ${value}`)
+  }
+
+  async setButtonOption(uuid, name) {
+    const worker = this.getWorker(uuid)
+    worker.optionSent = true;
+    return worker.send(`setoption name ${name}`)
+  }
+
+  async setCheckOption(uuid, name, value) {
+    const worker = this.getWorker(uuid)
+    worker.optionSent = true;
+    return worker.send(`setoption name ${name} value ${value}`)
+  }
+
+  async setComboOption(uuid, name, value) {
+    const worker = this.getWorker(uuid)
     worker.optionSent = true;
     return worker.send(`setoption name ${name} value ${value}`)
   }
@@ -196,9 +223,11 @@ class EngineQueue {
     const response = await worker.sendAndAwait("isready", "readyok");
 
     const retVal = {
+      info: worker.optionInfo,
       errors: worker.optionErrors,
       response: response[0]
     }
+    worker.optionInfo = []
     worker.optionErrors = []
     return retVal;
   }

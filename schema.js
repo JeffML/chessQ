@@ -31,6 +31,7 @@ const ChessQSchema = [`
 
   type ReadyResponse {
     errors: [String]!
+    info: [String]!
     response: String!
   }
 

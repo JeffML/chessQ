@@ -10,6 +10,9 @@ const engineQueue = new EngineQueue({length: 5});
 const EngineOps = (id) => ({
   uci: async () => await engineQueue.uci(id),
   setSpinOption: async ({name, value}) => await engineQueue.setSpinOption(id, name, value),
+  setButtonOption: async ({name}) => await engineQueue.setButtonOption(id, name),
+  setCheckOption: async ({name, value}) => await engineQueue.setCheckOption(id, name, value),
+  setComboOption: async ({name, value}) => await engineQueue.setComboOption(id, name, value),
   isready: async () => await engineQueue.isReady(id),
   go: async () => {
     let info;
