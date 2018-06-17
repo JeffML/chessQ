@@ -1,5 +1,3 @@
-import casual from 'casual';
-import stockfish from 'stockfish'
 import { capitalize } from 'lodash'
 import WorkerBuilder from './WorkerBuilder'
 
