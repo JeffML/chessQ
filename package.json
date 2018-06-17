@@ -29,7 +29,8 @@
 		"start": "babel-node --presets env app.js",
 		"debug": "babel-node --inspect --presets env app.js",
 		"bare": "node node_modules/stockfish/src/stockfish.js",
-		"test": "mocha --require babel-core/register ./test/*test.js"
+		"test": "mocha --require babel-core/register ./test/*test.js",
+		"testSingle": "mocha --require babel-core/register ./test/UCI_test.js"
 	},
 	"repository": {
 		"type": "git",

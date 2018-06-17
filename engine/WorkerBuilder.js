@@ -5,14 +5,22 @@ import stockfish from 'stockfish'
 Worker builder
 */
 
+/* worker statuses */
+const BEFORE_UCI = Symbol()
+const BEFORE_ISREADY = Symbol()
+const READY = Symbol()
+const RUNNING = Symbol()
+
+export { BEFORE_UCI, BEFORE_ISREADY, READY, RUNNING }
+
 const WorkerBuilder = {
     createWorker: () => {
+
         const worker = {
+            status: BEFORE_UCI,
             uuid: process.env.MOCK_UUID || casual.uuid,
             engine: stockfish(),
             lastUsed: new Date(),
-            beforeUci: true,
-            optionSent: false,
             optionErrors: [],
             optionInfo: []
         }
@@ -31,19 +39,30 @@ const WorkerBuilder = {
         }
 
         worker.engine.onmessage = function(line) {
-            // console.log("receiving:", line)
-            if (worker.beforeUci) {
-                // do nothing
-            } else if (worker.optionSent && line !== "readyok") {
-                if (line.startsWith('info')) {
-                    worker.optionInfo.push(line)
-                } else {
-                    worker.optionErrors.push(line)
-                }
-            } else {
-                worker.optionSent = false;
-                worker.responseStack.push(line)
+            switch (worker.status) {
+                case BEFORE_UCI:
+                    if (line === 'uciok') {
+                        worker.status = BEFORE_ISREADY
+                    }
+                    worker.responseStack.push(line)
+                    break;
+                case BEFORE_ISREADY:
+                    if (line !== "readyok") {
+                        if (line.startsWith('info')) {
+                            worker.optionInfo.push(line)
+                        } else {
+                            worker.optionErrors.push(line)
+                        }
+                        break;
+                    } else {
+                        worker.status = READY
+                    }
+
+                default:
+                    worker.responseStack.push(line)
+                    break;
             }
+
         }
 
         worker.sendAndAwait = async function(message, terminator) {

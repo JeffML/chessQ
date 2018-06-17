@@ -1,5 +1,5 @@
 import { capitalize } from 'lodash'
-import WorkerBuilder from './WorkerBuilder'
+import WorkerBuilder, { BEFORE_UCI, BEFORE_ISREADY, READY, RUNNING } from './WorkerBuilder'
 
 /* Manages engine instances */
 class EngineQueue {
@@ -40,8 +40,6 @@ class EngineQueue {
     }
 
 
-
-
     /* request an instance */
     requestEngine() {
         if (Object.keys(this.queue).length < this.length) {
@@ -59,8 +57,8 @@ class EngineQueue {
             throw Error(`No worker found for ${uuid}`)
         }
         // console.log("uuid is", worker.uuid)
-        worker.beforeUci = false;
         const responses = await worker.sendAndAwait("uci", "uciok")
+        worker.status = BEFORE_ISREADY
         worker.options = this.parseUciResponses(responses)
         return worker.options;
     }
@@ -136,25 +134,25 @@ class EngineQueue {
 
     async setSpinOption(uuid, name, value) {
         const worker = this.getWorker(uuid)
-        worker.optionSent = true;
+        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
     async setButtonOption(uuid, name) {
         const worker = this.getWorker(uuid)
-        worker.optionSent = true;
+        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name}`)
     }
 
     async setCheckOption(uuid, name, value) {
         const worker = this.getWorker(uuid)
-        worker.optionSent = true;
+        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
     async setComboOption(uuid, name, value) {
         const worker = this.getWorker(uuid)
-        worker.optionSent = true;
+        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
