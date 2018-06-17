@@ -1,236 +1,182 @@
 import casual from 'casual';
 import stockfish from 'stockfish'
-import {capitalize} from 'lodash'
+import { capitalize } from 'lodash'
+import WorkerBuilder from './WorkerBuilder'
 
 /* Manages engine instances */
 class EngineQueue {
-  constructor({length}) {
-    this.length = length;
-    this.queue = {}
-    this.monitorQueue();
-  }
-
-  monitorQueue() {
-    const isExpired = (e) => {
-      return (new Date() - e.lastUsed) > 10 * 60 * 1000
+    constructor({ length }) {
+        this.length = length;
+        this.queue = {}
+        this.monitorQueue();
     }
 
-    const scan = () => {
-      const workers = Object.entries(this.queue)
-      workers.forEach(w => {
-        if (isExpired(w)) {
-          this.killWorker(w)
+    monitorQueue() {
+        const isExpired = (e) => {
+            return (new Date() - e.lastUsed) > 10 * 60 * 1000
         }
-      })
+
+        const scan = () => {
+            const workers = Object.entries(this.queue)
+            workers.forEach(w => {
+                if (isExpired(w)) {
+                    this.killWorker(w)
+                }
+            })
+        }
+
+        this.monitor = setInterval(scan, 1000);
     }
 
-    this.monitor = setInterval(scan, 1000);
-  }
+    killWorker(w) {
+        w.send("exit");
+        delete this.queue[w.uuid]
+    }
 
-  killWorker(w) {
-    w.send("exit");
-    delete this.queue[w.uuid]
-  }
-
-  killAllAndExit() {
-    const workers = Object.values(this.queue)
-    workers.forEach(w => {
-      this.killWorker(w)
-    })
-    clearInterval(this.monitor)
-  }
-
-  /* request an instance */
-  requestEngine() {
-    if (Object.keys(this.queue).length < this.length) {
-      const worker = {
-        uuid: process.env.MOCK_UUID || casual.uuid,
-        engine: stockfish(),
-        lastUsed: new Date(),
-        beforeUci: true,
-        optionSent: false,
-        optionErrors: [],
-        optionInfo: []
-      }
-
-      worker.responseStack = [];
-
-      worker.getResponse = async function() {
-        return new Promise(resolve => {
-          const itvl = setInterval(function() {
-            if (worker.responseStack.length !== 0) {
-              resolve(worker.responseStack.shift())
-              clearInterval(itvl)
-            }
-          }, 20)
+    killAllAndExit() {
+        const workers = Object.values(this.queue)
+        workers.forEach(w => {
+            this.killWorker(w)
         })
-      }
+        clearInterval(this.monitor)
+    }
 
-      worker.engine.onmessage = function(line) {
-        // console.log("receiving:", line)
-        if (worker.beforeUci) {
-          // do nothing
-        } else if (worker.optionSent && line !== "readyok") {
-          if (line.startsWith('info')) {
-            worker.optionInfo.push(line)
-          } else {
-            worker.optionErrors.push(line)
-          }
+
+
+
+    /* request an instance */
+    requestEngine() {
+        if (Object.keys(this.queue).length < this.length) {
+            const worker = WorkerBuilder.createWorker();
+            this.queue[worker.uuid] = worker;
+            return Promise.resolve({ engineId: worker.uuid, state: "CREATED" })
         } else {
-          worker.optionSent = false;
-          worker.responseStack.push(line)
+            return Promise.reject(new Error("Maximum # of active engines exceeded; try again later"))
         }
-      }
-
-      worker.sendAndAwait = async function(message, terminator) {
-        const responses = [];
-        var response;
-        console.log("posting:", message)
-        worker.engine.postMessage(message)
-
-        do {
-          response = await worker.getResponse();
-          responses.push(response)
-        } while (response !== terminator)
-
-        return responses;
-      }
-
-      worker.send = function(message) {
-        console.log(`sending ${message}`)
-        worker.engine.postMessage(message)
-        return "acknowledged";
-      }
-
-      this.queue[worker.uuid] = worker;
-      return Promise.resolve({engineId: worker.uuid, state: "CREATED"})
-    } else {
-      return Promise.reject(new Error("Maximum # of active engines exceeded; try again later"))
-    }
-  }
-
-  async uci(uuid) {
-    const worker = this.queue[uuid];
-    if (!worker) {
-      throw Error(`No worker found for ${uuid}`)
-    }
-    // console.log("uuid is", worker.uuid)
-    worker.beforeUci = false;
-    const responses = await worker.sendAndAwait("uci", "uciok")
-    worker.options = this.parseUciResponses(responses)
-    return worker.options;
-  }
-
-  terminate(uuid) {
-    const worker = this.queue[uuid];
-    if (worker) {
-      this.queue.killWorker(worker)
-    }
-  }
-
-  // parse the response strings into JSON
-  parseUciResponses(responses) {
-
-    function parseOption(arr) {
-      const iType = arr.indexOf('type');
-      const optionName = arr.slice(0, iType).join(" ")
-
-      const rest = arr.slice(iType)
-      let __typename = capitalize(arr[iType + 1]) + "Option";
-
-      const optionParams = {};
-      for (let i = 0; i < rest.length; i += 2) {
-        optionParams[rest[i]] = rest[i + 1]
-      }
-
-      const retVal = Object.assign({
-        name: optionName,
-        __typename
-      }, optionParams)
-
-      if (retVal.default) {
-        retVal.value = retVal.default
-      };
-      return retVal
     }
 
-    let res = {
-      identity: {},
-      options: []
+    async uci(uuid) {
+        const worker = this.queue[uuid];
+        if (!worker) {
+            throw Error(`No worker found for ${uuid}`)
+        }
+        // console.log("uuid is", worker.uuid)
+        worker.beforeUci = false;
+        const responses = await worker.sendAndAwait("uci", "uciok")
+        worker.options = this.parseUciResponses(responses)
+        return worker.options;
     }
 
-    responses.forEach(r => {
-      let rarr = r.split(" ")
-      const [id, type] = rarr;
-      const rest = rarr.slice(2);
-
-      // console.log({id, type, rest})
-
-      switch (id) {
-        case "id":
-          res.identity = res.identity || {};
-          res.identity[type] = rest.join(" ");
-          break;
-        case "option":
-          res.options.push(parseOption(rest))
-          break;
-        default:
-          break
-      }
-    });
-
-    return res;
-  }
-
-  getWorker(uuid) {
-    const worker = this.queue[uuid];
-    if (!worker) {
-      throw Error(`No worker found for ${uuid}`)
-    }
-    return worker;
-  }
-
-  async setSpinOption(uuid, name, value) {
-    const worker = this.getWorker(uuid)
-    worker.optionSent = true;
-    return worker.send(`setoption name ${name} value ${value}`)
-  }
-
-  async setButtonOption(uuid, name) {
-    const worker = this.getWorker(uuid)
-    worker.optionSent = true;
-    return worker.send(`setoption name ${name}`)
-  }
-
-  async setCheckOption(uuid, name, value) {
-    const worker = this.getWorker(uuid)
-    worker.optionSent = true;
-    return worker.send(`setoption name ${name} value ${value}`)
-  }
-
-  async setComboOption(uuid, name, value) {
-    const worker = this.getWorker(uuid)
-    worker.optionSent = true;
-    return worker.send(`setoption name ${name} value ${value}`)
-  }
-
-  async isReady(uuid) {
-    const worker = this.queue[uuid];
-    if (!worker) {
-      throw Error(`No worker found for ${uuid}`)
+    terminate(uuid) {
+        const worker = this.queue[uuid];
+        if (worker) {
+            this.queue.killWorker(worker)
+        }
     }
 
-    const response = await worker.sendAndAwait("isready", "readyok");
+    // parse the response strings into JSON
+    parseUciResponses(responses) {
 
-    const retVal = {
-      info: worker.optionInfo,
-      errors: worker.optionErrors,
-      response: response[0]
+        function parseOption(arr) {
+            const iType = arr.indexOf('type');
+            const optionName = arr.slice(0, iType).join(" ")
+
+            const rest = arr.slice(iType)
+            let __typename = capitalize(arr[iType + 1]) + "Option";
+
+            const optionParams = {};
+            for (let i = 0; i < rest.length; i += 2) {
+                optionParams[rest[i]] = rest[i + 1]
+            }
+
+            const retVal = Object.assign({
+                name: optionName,
+                __typename
+            }, optionParams)
+
+            if (retVal.default) {
+                retVal.value = retVal.default
+            };
+            return retVal
+        }
+
+        let res = {
+            identity: {},
+            options: []
+        }
+
+        responses.forEach(r => {
+            let rarr = r.split(" ")
+            const [id, type] = rarr;
+            const rest = rarr.slice(2);
+
+            // console.log({id, type, rest})
+
+            switch (id) {
+                case "id":
+                    res.identity = res.identity || {};
+                    res.identity[type] = rest.join(" ");
+                    break;
+                case "option":
+                    res.options.push(parseOption(rest))
+                    break;
+                default:
+                    break
+            }
+        });
+
+        return res;
     }
-    worker.optionInfo = []
-    worker.optionErrors = []
-    return retVal;
-  }
+
+    getWorker(uuid) {
+        const worker = this.queue[uuid];
+        if (!worker) {
+            throw Error(`No worker found for ${uuid}`)
+        }
+        return worker;
+    }
+
+    async setSpinOption(uuid, name, value) {
+        const worker = this.getWorker(uuid)
+        worker.optionSent = true;
+        return worker.send(`setoption name ${name} value ${value}`)
+    }
+
+    async setButtonOption(uuid, name) {
+        const worker = this.getWorker(uuid)
+        worker.optionSent = true;
+        return worker.send(`setoption name ${name}`)
+    }
+
+    async setCheckOption(uuid, name, value) {
+        const worker = this.getWorker(uuid)
+        worker.optionSent = true;
+        return worker.send(`setoption name ${name} value ${value}`)
+    }
+
+    async setComboOption(uuid, name, value) {
+        const worker = this.getWorker(uuid)
+        worker.optionSent = true;
+        return worker.send(`setoption name ${name} value ${value}`)
+    }
+
+    async isReady(uuid) {
+        const worker = this.queue[uuid];
+        if (!worker) {
+            throw Error(`No worker found for ${uuid}`)
+        }
+
+        const response = await worker.sendAndAwait("isready", "readyok");
+
+        const retVal = {
+            info: worker.optionInfo,
+            errors: worker.optionErrors,
+            response: response[0]
+        }
+        worker.optionInfo = []
+        worker.optionErrors = []
+        return retVal;
+    }
 
 }
 
