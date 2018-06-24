@@ -80,7 +80,9 @@ const WorkerBuilder = {
         }
 
         worker.send = function(message) {
-            console.log(`sending ${message}`)
+            if (message.startsWith("setoption")) {
+                worker.status = BEFORE_ISREADY
+            }
             worker.engine.postMessage(message)
             return "acknowledged";
         }

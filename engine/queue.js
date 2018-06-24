@@ -134,25 +134,21 @@ class EngineQueue {
 
     async setSpinOption(uuid, name, value) {
         const worker = this.getWorker(uuid)
-        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
     async setButtonOption(uuid, name) {
         const worker = this.getWorker(uuid)
-        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name}`)
     }
 
     async setCheckOption(uuid, name, value) {
         const worker = this.getWorker(uuid)
-        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
     async setComboOption(uuid, name, value) {
         const worker = this.getWorker(uuid)
-        worker.status = BEFORE_ISREADY
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
