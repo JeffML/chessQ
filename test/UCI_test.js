@@ -38,7 +38,7 @@ describe("UCI prolog tests", () => {
     })
 
     it("invoke ucinewgame", done => {
-        engineQueue.newGame(instance.engineId).then(res => {
+        engineQueue.newGame(instance.engineId, "startpos").then(res => {
             res.should.equal("acknowledged")
             done();
         }).catch(e => done(e))
