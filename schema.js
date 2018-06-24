@@ -1,4 +1,4 @@
-import {makeExecutableSchema, addMockFunctionsToSchema} from 'graphql-tools'
+import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools'
 import fs from 'fs';
 
 import OptionsSchema from './optionsSchema'
@@ -6,7 +6,8 @@ import ReadySchema from './readySchema'
 
 import resolvers from './resolvers'
 
-const ChessQSchema = [`
+const ChessQSchema = [
+    `
   type Query {
     version: String!
     createEngine: EngineResponse
@@ -24,6 +25,7 @@ const ChessQSchema = [`
     setButtonOption(name: String!): String!
     setCheckOption(name: String!, value: Boolean!): String!
     setComboOption(name: String!, value: String!): String!
+    newGame: String!
     quit: String!
     isready: ReadyResponse!
     go: BestMove!
@@ -63,25 +65,26 @@ const ChessQSchema = [`
   type Subscription {
     info: Info
   }
-`]
+`
+]
 
 const typeDefs = [
-  ...ChessQSchema,
-  ...OptionsSchema,
-  ...ReadySchema
+    ...ChessQSchema,
+    ...OptionsSchema,
+    ...ReadySchema
 ]
 
 const TOPIC = 'info'
 
 function sleep(ms) {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms)
-  })
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
+    })
 }
 
 const options = {
-  typeDefs,
-  resolvers
+    typeDefs,
+    resolvers
 }
 
 const executableSchema = makeExecutableSchema(options);

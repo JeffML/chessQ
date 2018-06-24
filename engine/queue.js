@@ -1,5 +1,6 @@
 import { capitalize } from 'lodash'
 import WorkerBuilder, { BEFORE_UCI, BEFORE_ISREADY, READY, RUNNING } from './WorkerBuilder'
+import validateFEN from 'fen-validator'
 
 /* Manages engine instances */
 class EngineQueue {
@@ -152,9 +153,20 @@ class EngineQueue {
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
-    async newGame(uuid) {
-        return this.getWorker(uuid).send(`ucinewgame`);
+    async newGame(uuid, fen, moves) {
+
+        const worker = this.getWorker(uuid)
+        worker.send(`ucinewgame`);
+        if (fen !== "startpos") {
+            const valid = validateFEN(fen);
+            if (!valid) {
+                return ({ error: "Invalid FEN" })
+            }
+        }
+        return worker.send(`position ${fen} moves ${moves}`)
     }
+
+
 
     async isReady(uuid) {
         const worker = this.queue[uuid];
