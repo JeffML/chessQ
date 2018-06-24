@@ -152,6 +152,10 @@ class EngineQueue {
         return worker.send(`setoption name ${name} value ${value}`)
     }
 
+    async newGame(uuid) {
+        return this.getWorker(uuid).send(`ucinewgame`);
+    }
+
     async isReady(uuid) {
         const worker = this.queue[uuid];
         if (!worker) {
