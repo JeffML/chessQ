@@ -1,5 +1,5 @@
 import { PubSub, withFilter } from 'graphql-subscriptions';
-import MoveScalar from './moveScalar'
+import MoveScalar from './moveScalar';
 
 
 import EngineQueue from './engine/queue';
