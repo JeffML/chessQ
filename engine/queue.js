@@ -59,7 +59,7 @@ class EngineQueue {
     // console.log("uuid is", worker.uuid)
     const responses = await worker.sendAndAwait('uci', 'uciok');
     worker.status = BEFORE_ISREADY;
-    worker.options = this.parseUciResponses(responses);
+    worker.options = EngineQueue.parseUciResponses(responses);
     return worker.options;
   }
 
