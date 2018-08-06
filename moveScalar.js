@@ -13,9 +13,9 @@ const moveScalar = new GraphQLScalarType({
   parseLiteral(ast) {
     if (ast.kind === Kind.STRING) {
       //TODO: do a pattern check
-      return ast.value
+      return ast.value 
     }
   }
 });
 
-export default moveScalar;
+export default moveScalar; 
