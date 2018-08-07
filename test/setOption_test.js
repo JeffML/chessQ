@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 const chai = require('chai');
 
 const should = chai.should();
