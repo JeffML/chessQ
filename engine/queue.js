@@ -190,7 +190,8 @@ class EngineQueue {
     }
 
     const response = await worker.sendAndAwait('go', 'bestmove');
-    const [, value, , ponder] = response.last().split(' ');
+    console.log({ response });
+    const [, value, , ponder] = response.slice(-1)[0].split(' ');
     return {
       value, ponder,
     };

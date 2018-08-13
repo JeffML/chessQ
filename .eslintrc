@@ -8,6 +8,7 @@
     },
     "extends": "airbnb-base",
     "rules": {
-        "linebreak-style": "off"
+        "linebreak-style": "off",
+        "func-names": "off"
     }
 }
