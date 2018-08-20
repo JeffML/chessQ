@@ -31,10 +31,27 @@ describe('go test', () => {
     // this.skip();
     engineQueue.go(instance.engineId)
       .then((response) => {
-        console.log({response})
+        // console.log({ response });
         response.should.have.property('value');
         response.should.have.property('ponder');
         done();
       }).catch(e => done(e));
   }).timeout(5000);
+
+  it('go and stop', (done) => {
+    // this.skip();
+    const go = () => engineQueue.go(instance.engineId, 'infinite')
+      .then((response) => {
+        // console.log({ response });
+        response.should.have.property('value');
+        response.should.have.property('ponder');
+      });
+
+    const stop = () => engineQueue.stop(instance.engineId)
+      .then((response) => {
+        response.should.equal('acknowledged');
+      });
+
+    Promise.all([go, stop]).then(() => done()).catch(e => done(e));
+  }).timeout(15000);
 });

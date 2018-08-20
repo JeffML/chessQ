@@ -183,7 +183,7 @@ class EngineQueue {
   }
 
 
-  async go(uuid) {
+  async go(uuid, infinite = '') {
     const worker = this.getWorker(uuid);
     if (!worker) {
       throw Error(`No worker found for ${uuid}`);
@@ -214,7 +214,7 @@ class EngineQueue {
       };
     }
 
-    const response = await worker.sendAndAwait('go', 'bestmove');
+    const response = await worker.sendAndAwait(`go ${infinite}`, 'bestmove');
     console.log({ response });
     // TODO  the following response is given:
     // 'bestmove e2e4 bestmoveSan e4 baseTurn w score cp 90
@@ -223,6 +223,15 @@ class EngineQueue {
     // score cp 90:  score in centipawns (cp)
     // note that ponder may or may not be present
     return parseGo(response);
+  }
+
+  async stop(uuid) {
+    const worker = this.getWorker(uuid);
+    if (!worker) {
+      throw Error(`No worker found for ${uuid}`);
+    }
+
+    return worker.send('stop');
   }
 }
 
