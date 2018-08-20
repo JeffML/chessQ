@@ -58,6 +58,7 @@ const ChessQSchema = [
   type BestMove {
     value: Move!,
     ponder: Move
+    unparsed: String
   }
 
   union Info = Score | Depth | Nps | BestMove

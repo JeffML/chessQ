@@ -189,12 +189,40 @@ class EngineQueue {
       throw Error(`No worker found for ${uuid}`);
     }
 
+    function parseGo(response) {
+      // attempts to parse the bestmove response; unparsed tokens are also returned, in order of response
+      const tokens = response.slice(-1)[0].split(' ');
+
+      function getResponse(name, numVals = 1) {
+        // grab response by name, get the values, strip from tokens; remaining tokens will be 'unparsed'
+        const idx = tokens.indexOf(name);
+        if (idx >= 0) {
+          const res = tokens.splice(idx, numVals + 1);
+          return res.slice(1).join(' ');
+        }
+        return null;
+      }
+
+      const value = getResponse('bestmove');
+      const ponder = getResponse('ponder');
+      const unparsed = tokens.join(' ');
+
+      return {
+        value,
+        ponder,
+        unparsed,
+      };
+    }
+
     const response = await worker.sendAndAwait('go', 'bestmove');
     console.log({ response });
-    const [, value, , ponder] = response.slice(-1)[0].split(' ');
-    return {
-      value, ponder,
-    };
+    // TODO  the following response is given:
+    // 'bestmove e2e4 bestmoveSan e4 baseTurn w score cp 90
+    // bestmoveSan: best move sanitized?
+    // baseTurn: whose turn it is?
+    // score cp 90:  score in centipawns (cp)
+    // note that ponder may or may not be present
+    return parseGo(response);
   }
 }
 

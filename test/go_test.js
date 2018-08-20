@@ -23,14 +23,15 @@ describe('go test', () => {
 
   it('is ready', (done) => {
     engineQueue.isReady(instance.engineId)
-    .then(done())
-    .catch(e => done(e))
-  })
+      .then(done())
+      .catch(e => done(e));
+  });
 
   it('go not infinite', (done) => {
     // this.skip();
     engineQueue.go(instance.engineId)
       .then((response) => {
+        console.log({response})
         response.should.have.property('value');
         response.should.have.property('ponder');
         done();

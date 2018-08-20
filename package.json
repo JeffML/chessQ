@@ -35,7 +35,7 @@
 		"debug": "babel-node --inspect --presets env app.js",
 		"bare": "node node_modules/stockfish/src/stockfish.js",
 		"test": "mocha --require babel-core/register ./test/*test.js",
-		"testSingle": "mocha --require babel-core/register ./test/${TEST}.js"
+		"testSingle": "mocha --require babel-core/register"
 	},
 	"repository": {
 		"type": "git",
