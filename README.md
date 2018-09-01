@@ -7,6 +7,7 @@ GraphQL wrapper around Universal Chess Interface
 ## Where it's at
 
 -   writing tests
+    -- figure out why go/stop test does not execute as expected via Promise.all();
 
 ## TODO
 

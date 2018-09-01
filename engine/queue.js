@@ -215,13 +215,7 @@ class EngineQueue {
     }
 
     const response = await worker.sendAndAwait(`go ${infinite}`, 'bestmove');
-    console.log({ response });
-    // TODO  the following response is given:
-    // 'bestmove e2e4 bestmoveSan e4 baseTurn w score cp 90
-    // bestmoveSan: best move sanitized?
-    // baseTurn: whose turn it is?
-    // score cp 90:  score in centipawns (cp)
-    // note that ponder may or may not be present
+    // console.log({ response });
     return parseGo(response);
   }
 
