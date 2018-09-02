@@ -10,9 +10,12 @@ GraphQL wrapper around Universal Chess Interface
     -- ✓ figure out why go/stop test does not execute as expected via Promise.all();
     -- unit tests stage 1 complete; API tests stage 1 begin
 
-## TODO
+## TESTS
 
-Unit tests
+### To run a single test:
+    npm run testSingle -- test/fooTest
+
+### Unit tests
 -   ✓ isready state
     -   ✓ set when readyok received
     -   ✓ unset on any setoption
@@ -23,10 +26,12 @@ Unit tests
 -   ✓ go
 -   ✓ stop
 
-API tests
+### API tests
     - all the above unit tests via GraphQL, plus:
         -  subscriptions
 
+
+# TODO
 Refactor
     -   throw workers in proper Node.js worker processes (like from threads.js)
 

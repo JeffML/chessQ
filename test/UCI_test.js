@@ -22,7 +22,7 @@ describe('UCI prolog tests', () => {
         res.identity.should.have.property('author');
         res.should.have.property('options');
         res.options.should.have.lengthOf.above(1);
-        done(res);
+        done(null, res);
       }).catch(e => done(e));
     });
   }).timeout(5000);
