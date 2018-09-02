@@ -41,14 +41,14 @@ describe('go test', () => {
     // this.skip();
     const go = engineQueue.go(instance.engineId, 'infinite')
       .then((response) => {
-        console.log({ gogo: response });
+        // console.log({ gogo: response });
         response.should.have.property('value');
         response.should.have.property('ponder');
       });
 
     const stop = engineQueue.stop(instance.engineId)
       .then((response) => {
-        console.log({ stopstop: response });
+        // console.log({ stopstop: response });
         response.should.equal('acknowledged');
       });
 
