@@ -38,7 +38,7 @@ const typeDefs = `
   type UciResponse {
     identity: UciIdentity!
     options : [Option]
-    uciokay : Boolean!
+    uciok : Boolean!
   }
-`
-export default[typeDefs]
+`;
+export default[typeDefs];

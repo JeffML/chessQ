@@ -9,6 +9,7 @@
     "extends": "airbnb-base",
     "rules": {
         "linebreak-style": "off",
-        "func-names": "off"
+        "func-names": "off",
+        "no-console": "off"
     }
 }

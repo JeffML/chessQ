@@ -1,4 +1,4 @@
-# chessQ
+# chessQ, v0.1.0
 
 ![build status](https://travis-ci.org/JeffML/chessQ.svg?branch=master)
 
@@ -7,10 +7,12 @@ GraphQL wrapper around Universal Chess Interface
 ## Where it's at
 
 -   writing tests
-    -- figure out why go/stop test does not execute as expected via Promise.all();
+    -- ✓ figure out why go/stop test does not execute as expected via Promise.all();
+    -- unit tests stage 1 complete; API tests stage 1 begin
 
 ## TODO
 
+Unit tests
 -   ✓ isready state
     -   ✓ set when readyok received
     -   ✓ unset on any setoption
@@ -20,9 +22,14 @@ GraphQL wrapper around Universal Chess Interface
     -   ✓ with validation
 -   ✓ go
 -   ✓ stop
--   subscriptions
--   throw workers in proper Node.js worker processes (like from threads.js)
 
-## node-uci
+API tests
+    - all the above unit tests via GraphQL, plus:
+        -  subscriptions
 
-TODO: write resolvers using node-uci. Determine which root resolver to use by 'embedded' || 'node_uci' sysvar(?) with exe path
+Refactor
+    -   throw workers in proper Node.js worker processes (like from threads.js)
+
+# version 0.2.0
+    TODO: write resolvers using node-uci. Determine which root resolver to use by 'embedded' || 'node_uci' sysvar(?) with exe path
+    add github stats: code coverage, etc.

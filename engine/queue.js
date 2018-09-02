@@ -51,6 +51,14 @@ class EngineQueue {
     return Promise.reject(new Error('Maximum # of active engines exceeded; try again later'));
   }
 
+
+  terminate(uuid) {
+    const worker = this.queue[uuid];
+    if (worker) {
+      this.queue.killWorker(worker);
+    }
+  }
+
   async uci(uuid) {
     const worker = this.queue[uuid];
     if (!worker) {
@@ -60,15 +68,10 @@ class EngineQueue {
     const responses = await worker.sendAndAwait('uci', 'uciok');
     worker.status = BEFORE_ISREADY;
     worker.options = EngineQueue.parseUciResponses(responses);
+    console.log('wo', worker.options);
     return worker.options;
   }
 
-  terminate(uuid) {
-    const worker = this.queue[uuid];
-    if (worker) {
-      this.queue.killWorker(worker);
-    }
-  }
 
   // parse the response strings into JSON
   static parseUciResponses(responses) {
@@ -106,6 +109,7 @@ class EngineQueue {
       const rest = rarr.slice(2);
 
       // console.log({id, type, rest})
+      res.uciok = false;
 
       switch (id) {
         case 'id':
@@ -114,6 +118,9 @@ class EngineQueue {
           break;
         case 'option':
           res.options.push(parseOption(rest));
+          break;
+        case 'uciok':
+          res.uciok = true;
           break;
         default:
           break;

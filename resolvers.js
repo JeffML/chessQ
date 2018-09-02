@@ -18,9 +18,11 @@ const EngineOps = id => ({
   go: async () => engineQueue.go(id),
 });
 
+const TOPIC = 'info';
+
 export default {
   Query: {
-    version: () => '1.0.0', // TODO: read from package.json
+    version: () => '0.1.0', // TODO: read from package.json
     createEngine: () => engineQueue.requestEngine(),
   },
   Move: MoveScalar,
