@@ -18,8 +18,8 @@ GraphQL wrapper around Universal Chess Interface
 -   ✓ ucinewgame
 -   ✓ position
     -   ✓ with validation
--   go
--   stop
+-   &check; go
+-   &check; stop
 -   subscriptions
 -   throw workers in proper Node.js worker processes (like from threads.js)
 
