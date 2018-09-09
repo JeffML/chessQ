@@ -1,9 +1,6 @@
-import { PubSub, withFilter } from 'graphql-subscriptions';
+import { PubSub, withFilter } from 'apollo-server-express';
 import MoveScalar from './moveScalar';
-
-
 import EngineQueue from './engine/queue';
-import InfoGenerator from './test/tasks/InfoGenerator';
 
 const pubsub = new PubSub();
 const engineQueue = new EngineQueue({ length: 5 });

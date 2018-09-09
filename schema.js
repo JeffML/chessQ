@@ -91,3 +91,4 @@ const options = {
 const executableSchema = makeExecutableSchema(options);
 // addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
 export default executableSchema;
+export { typeDefs };
