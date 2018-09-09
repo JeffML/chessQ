@@ -1,8 +1,9 @@
 /* eslint-env mocha */
-const chai = require('chai');
+import { should } from 'chai';
+import EngineQueue from '../engine/queue';
 
-chai.should();
-const EngineQueue = require('../engine/queue').default;
+should();
+
 
 describe('UCI prolog tests', () => {
   const engineQueue = new EngineQueue({ length: 1 });

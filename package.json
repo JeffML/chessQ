@@ -9,6 +9,7 @@
 		"debug": "babel-node --inspect --presets env app.js",
 		"bare": "node node_modules/stockfish/src/stockfish.js",
 		"test": "mocha --require babel-core/register ./test/*test.js",
+		"test-api": "mocha --require babel-core/register ./test-api/*test.js",
 		"testSingle": "mocha --require babel-core/register"
 	},
 	"dependencies": {
