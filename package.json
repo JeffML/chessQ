@@ -27,8 +27,7 @@
 		"graphql-tag": "^2.9.2",
 		"graphql-tools": "^3.1.1",
 		"lodash": "^4.17.10",
-		"stockfish": "^8.0.0",
-		"subscriptions-transport-ws": "^0.9.14"
+		"stockfish": "^8.0.0"
 	},
 	"devDependencies": {
 		"apollo-fetch": "^0.7.0",
