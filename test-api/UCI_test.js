@@ -7,6 +7,18 @@ chai.should();
 const uri = 'http://localhost:3001/graphql';
 const apolloFetch = createApolloFetch({ uri });
 
+const fetch = query => new Promise((resolve, reject) => {
+  apolloFetch({ query /* variables, operationName */ }) // all apolloFetch arguments are optional
+    .then((result) => {
+      const { data, errors /* , extensions */ } = result;
+      if (errors) {
+        reject(errors);
+      } else {
+        resolve(data);
+      }
+    });
+});
+
 describe('UCI request', function () {
   this.timeout(5000);
 
@@ -17,13 +29,8 @@ describe('UCI request', function () {
       }
     `;
 
-    apolloFetch({ query /* variables, operationName */ }) // all apolloFetch arguments are optional
-      .then((result) => {
-        const { data, errors /* , extensions */ } = result;
-        if (errors) {
-          done(errors);
-          return;
-        }
+    fetch(query)
+      .then((data) => {
         // console.log(data);
         data.should.have.property('createEngine');
         data.createEngine.should.have.property('engineId');
@@ -55,13 +62,8 @@ describe('UCI request', function () {
       }
     `;
 
-    apolloFetch({ query /* variables, operationName */ }) // all apolloFetch arguments are optional
-      .then((result) => {
-        const { data, errors /* , extensions */ } = result;
-        if (errors) {
-          done(new Error(JSON.stringify(errors)));
-          return;
-        }
+    fetch(query)
+      .then((data) => {
         // console.log(data);
         data.should.have.property('Engine');
         const eng = data.Engine;
@@ -73,11 +75,26 @@ describe('UCI request', function () {
         // eslint-disable-next-line no-unused-expressions
         eng.uci.uciok.should.be.ok;
         done(null, data);
-      // GraphQL errors and extensions are optional
       })
       .catch((error) => {
         done(error);
-      // respond to a network error
       });
   });
+
+  // it('invoke isReady', (done) => {
+  //   engineQueue.isReady(instance.engineId).then((res) => {
+  //     res.should.have.property('errors');
+  //     res.errors.should.have.lengthOf(0);
+  //     res.should.have.property('response');
+  //     res.response.should.equal('readyok');
+  //     done();
+  //   }).catch(e => done(e));
+  // });
+
+  // it('invoke ucinewgame', (done) => {
+  //   engineQueue.newGame(instance.engineId, 'startpos').then((res) => {
+  //     res.should.equal('acknowledged');
+  //     done();
+  //   }).catch(e => done(e));
+  // });
 });
