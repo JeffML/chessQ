@@ -12,7 +12,8 @@ const fetch = query => new Promise((resolve, reject) => {
     .then((result) => {
       const { data, errors /* , extensions */ } = result;
       if (errors) {
-        reject(errors);
+        console.error(errors);
+        reject(new Error(errors));
       } else {
         resolve(data);
       }
@@ -81,20 +82,42 @@ describe('UCI request', function () {
       });
   });
 
-  // it('invoke isReady', (done) => {
-  //   engineQueue.isReady(instance.engineId).then((res) => {
-  //     res.should.have.property('errors');
-  //     res.errors.should.have.lengthOf(0);
-  //     res.should.have.property('response');
-  //     res.response.should.equal('readyok');
-  //     done();
-  //   }).catch(e => done(e));
-  // });
+  it('invoke isReady', (done) => {
+    const query = `
+      mutation {
+          Engine(id: "1") {
+            isready {
+              errors
+              info
+              response
+            }
+          }
+      }`;
 
-  // it('invoke ucinewgame', (done) => {
-  //   engineQueue.newGame(instance.engineId, 'startpos').then((res) => {
-  //     res.should.equal('acknowledged');
-  //     done();
-  //   }).catch(e => done(e));
-  // });
+    fetch(query)
+      .then((res) => {
+        const eng = res.Engine;
+        eng.should.have.property('isready');
+        eng.isready.should.have.property('errors');
+        eng.isready.errors.should.have.lengthOf(0);
+        eng.isready.should.have.property('response');
+        eng.isready.response.should.equal('readyok');
+        done();
+      }).catch(e => done(e));
+  });
+
+  it('invoke ucinewgame', (done) => {
+    const query = ` mutation {
+      Engine(id: "1") {
+        newGame(positionType: startpos)
+      }
+    }`;
+    fetch(query)
+      .then((res) => {
+        const eng = res.Engine;
+        eng.should.have.property('newGame');
+        eng.newGame.should.equal('acknowledged');
+        done();
+      }).catch(e => done(e));
+  });
 });

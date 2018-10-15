@@ -167,7 +167,10 @@ class EngineQueue {
         return ({ error: 'Invalid FEN' });
       }
     }
-    return worker.send(`position ${fen} moves ${moves}`);
+    if (moves) {
+      return worker.send(`position ${fen} moves ${moves}`);
+    }
+    return worker.send(`position ${fen}`);
   }
 
 

@@ -12,6 +12,11 @@ const EngineOps = id => ({
   setCheckOption: async ({ name, value }) => engineQueue.setCheckOption(id, name, value),
   setComboOption: async ({ name, value }) => engineQueue.setComboOption(id, name, value),
   isready: async () => engineQueue.isReady(id),
+  newGame: async (data) => {
+    const { positionType, moves } = data;
+    console.log({ positionType, moves });
+    return engineQueue.newGame(id, positionType, moves);
+  },
   go: async () => engineQueue.go(id),
 });
 

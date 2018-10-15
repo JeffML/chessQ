@@ -1,5 +1,4 @@
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
-import fs from 'fs';
 
 import OptionsSchema from './optionsSchema';
 import ReadySchema from './readySchema';
@@ -25,10 +24,15 @@ const ChessQSchema = [
     setButtonOption(name: String!): String!
     setCheckOption(name: String!, value: Boolean!): String!
     setComboOption(name: String!, value: String!): String!
-    newGame: String!
+    newGame (positionType: POSITION_ENUM!, moves: [Move]): String!
     quit: String!
     isready: ReadyResponse!
     go: BestMove!
+  }
+
+  enum POSITION_ENUM {
+    fen,
+    startpos
   }
 
   type ReadyResponse {
