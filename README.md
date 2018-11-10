@@ -5,10 +5,8 @@
 GraphQL wrapper around Universal Chess Interface
 
 ## Where it's at
-
--   writing tests
-    -- ✓ figure out why go/stop test does not execute as expected via Promise.all();
-    -- unit tests stage 1 complete; API tests stage 1 begin
+- all non-subscription tasks implemented and tested
+- now working on subscription
 
 ## TESTS
 
