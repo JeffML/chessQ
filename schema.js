@@ -1,4 +1,4 @@
-import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
+import { makeExecutableSchema } from 'graphql-tools';
 
 import OptionsSchema from './optionsSchema';
 import ReadySchema from './readySchema';
@@ -24,7 +24,7 @@ const ChessQSchema = [
     setButtonOption(name: String!): String!
     setCheckOption(name: String!, value: Boolean!): String!
     setComboOption(name: String!, value: String!): String!
-    newGame (positionType: POSITION_ENUM!, moves: [Move]): String!
+    newGame (positionType: POSITION_ENUM=startpos, moves: [Move]): String!
     quit: String!
     isready: ReadyResponse!
     go: BestMove!
@@ -79,20 +79,11 @@ const typeDefs = [
   ...ReadySchema,
 ];
 
-const TOPIC = 'info';
-
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
 const options = {
   typeDefs,
   resolvers,
 };
 
 const executableSchema = makeExecutableSchema(options);
-// addMockFunctionsToSchema({schema: executableSchema, mocks, preserveResolvers: true})
 export default executableSchema;
 export { typeDefs };
