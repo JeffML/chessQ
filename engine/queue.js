@@ -193,18 +193,20 @@ class EngineQueue {
   }
 
 
-  async go(uuid, infinite = '') {
+  async go(uuid, { infinite }) {
     const worker = this.getWorker(uuid);
     if (!worker) {
       throw Error(`No worker found for ${uuid}`);
     }
 
     function parseGo(response) {
-      // attempts to parse the bestmove response; unparsed tokens are also returned, in order of response
+      // attempts to parse the bestmove response; unparsed tokens
+      // are also returned, in order of response
       const tokens = response.slice(-1)[0].split(' ');
 
       function getResponse(name, numVals = 1) {
-        // grab response by name, get the values, strip from tokens; remaining tokens will be 'unparsed'
+        // grab response by name, get the values, strip from tokens;
+        // remaining tokens will be 'unparsed'
         const idx = tokens.indexOf(name);
         if (idx >= 0) {
           const res = tokens.splice(idx, numVals + 1);
@@ -224,9 +226,13 @@ class EngineQueue {
       };
     }
 
-    const response = await worker.sendAndAwait(`go ${infinite}`, 'bestmove');
-    // console.log({ response });
-    return parseGo(response);
+    if (!infinite) {
+      const response = await worker.sendAndAwait('go', 'bestmove');
+      // console.log({ response });
+      return parseGo(response);
+    }
+
+    return worker.send('go infinite');
   }
 
   async stop(uuid) {

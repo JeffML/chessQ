@@ -1,26 +1,26 @@
-var chai = require('chai');
-var should = chai.should();
-var EngineQueue = require('../engine/queue').default
+/* eslint-env mocha */
+import chai from 'chai';
+import EngineQueue from '../engine/queue';
 
-describe("Engine Queue tests", () => {
-  var instance;
-  const engineQueue = new EngineQueue({length: 1})
+chai.should();
 
-  after(done => {
-    engineQueue.killAllAndExit()
-    done()
-  })
+describe('Engine Queue tests', () => {
+  const engineQueue = new EngineQueue({ length: 1 });
 
-  it("Create Engine instance", done => {
-    engineQueue.requestEngine().then(engine => {
-      instance = engine
-      engine.should.have.property("engineId")
-      engine.should.have.property("state")
+  after((done) => {
+    engineQueue.killAllAndExit();
+    done();
+  });
+
+  it('Create Engine instance', (done) => {
+    engineQueue.requestEngine().then((engine) => {
+      engine.should.have.property('engineId');
+      engine.should.have.property('state');
       engine.engineId.should.not.have.lengthOf(0);
-      engine.state.should.equal("CREATED")
+      engine.state.should.equal('CREATED');
       done();
-    }).catch(e => {
-      done(e)
-    })
-  }).timeout(4000)
-})
+    }).catch((e) => {
+      done(e);
+    });
+  }).timeout(4000);
+});

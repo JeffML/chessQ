@@ -28,6 +28,8 @@ const ChessQSchema = [
     quit: String!
     isready: ReadyResponse!
     go: BestMove!
+    goInfinite: String!
+    stop: String!
   }
 
   enum POSITION_ENUM {

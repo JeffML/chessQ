@@ -17,7 +17,9 @@ const EngineOps = id => ({
     console.log({ positionType, moves });
     return engineQueue.newGame(id, positionType, moves);
   },
-  go: async infinite => engineQueue.go(id, infinite ? 'infinite' : ''),
+  go: async () => engineQueue.go(id, { infinite: false }),
+  goInfinite: async () => engineQueue.go(id, { infinite: true }),
+  stop: async () => engineQueue.stop(id),
 });
 
 const TOPIC = 'info';
