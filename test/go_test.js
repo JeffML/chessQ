@@ -28,7 +28,7 @@ describe('go test', () => {
   });
 
   it('go not infinite', (done) => {
-    engineQueue.go(instance.engineId)
+    engineQueue.go(instance.engineId, { infinite: false })
       .then((response) => {
         // console.log({ response });
         response.should.have.property('value');
@@ -39,19 +39,13 @@ describe('go test', () => {
 
   it('go and stop', (done) => {
     // this.skip();
-    const go = engineQueue.go(instance.engineId, 'infinite')
-      .then((response) => {
-        // console.log({ gogo: response });
-        response.should.have.property('value');
-        response.should.have.property('ponder');
-      });
-
-    const stop = engineQueue.stop(instance.engineId)
-      .then((response) => {
-        // console.log({ stopstop: response });
-        response.should.equal('acknowledged');
-      });
-
-    Promise.all([go, stop]).then(() => done()).catch(e => done(e));
+    engineQueue.go(instance.engineId, { infinite: true })
+      .then((response) => { console.log('go infinite'); return response; })
+      .then(response => response.should.equal('acknowledged'))
+      .then(() => new Promise(resolve => setTimeout(() => { resolve(); }, 3000)))
+      .then(() => console.log('wait over'))
+      .then(() => engineQueue.stop(instance.engineId))
+      .then(response => response.should.equal('acknowledged'))
+      .then(() => done());
   }).timeout(15000);
 });

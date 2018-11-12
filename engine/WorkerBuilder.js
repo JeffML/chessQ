@@ -62,6 +62,7 @@ const WorkerBuilder = {
           }
 
         default:
+          console.log({ line });
           worker.responseStack.push(line);
           break;
       }
@@ -76,7 +77,7 @@ const WorkerBuilder = {
       do {
         response = await worker.getResponse();
         responses.push(response);
-        console.log({response});
+        console.log({ response });
       } while (!response.startsWith(terminator));
 
       return responses;
