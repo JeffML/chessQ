@@ -8,7 +8,8 @@ GraphQL wrapper around Universal Chess Interface
 - current bug:  goInfinite is delaying response 
     - test/go_test.js 'go and stop' shows the issue:
         - by default, all response lines are cached (see WorkerBuilder onmessage())
-            - need to know when *go infinite* is running, and send subscription messages instead
+            - :check: need to know when *go infinite* is running, and send subscription messages instead
+            - still getting cached responses dumped (somehow)
 - working on subscription 
 
 ## TESTS

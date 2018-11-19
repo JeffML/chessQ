@@ -60,9 +60,12 @@ const WorkerBuilder = {
             worker.responseStack.push(line);
             break;
           }
+        case RUNNING:
+          console.log('subscription =>', line);
+          break;
 
         default:
-          console.log({ line });
+          console.log({ status: worker.status, line });
           worker.responseStack.push(line);
           break;
       }
@@ -86,7 +89,10 @@ const WorkerBuilder = {
     worker.send = function (message) {
       if (message.startsWith('setoption')) {
         worker.status = BEFORE_ISREADY;
+      } else if (message === 'go infinite') {
+        worker.status = RUNNING;
       }
+
       worker.engine.postMessage(message);
       return 'acknowledged';
     };
