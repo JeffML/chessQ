@@ -36,16 +36,4 @@ describe('go test', () => {
         done();
       }).catch(e => done(e));
   }).timeout(5000);
-
-  it('go and stop', (done) => {
-    // this.skip();
-    engineQueue.go(instance.engineId, { infinite: true })
-      .then((response) => { console.log('go infinite'); return response; })
-      .then(response => response.should.equal('acknowledged'))
-      .then(() => new Promise(resolve => setTimeout(() => { resolve(); }, 3000)))
-      .then(() => console.log('wait over'))
-      .then(() => engineQueue.stop(instance.engineId))
-      .then(response => response.should.equal('acknowledged'))
-      .then(() => done());
-  }).timeout(15000);
 });

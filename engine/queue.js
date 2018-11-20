@@ -68,7 +68,7 @@ class EngineQueue {
     const responses = await worker.sendAndAwait('uci', 'uciok');
     worker.status = BEFORE_ISREADY;
     worker.options = EngineQueue.parseUciResponses(responses);
-    console.log('wo', worker.options);
+    // console.log('wo', worker.options);
     return worker.options;
   }
 
@@ -181,7 +181,7 @@ class EngineQueue {
     }
 
     const response = await worker.sendAndAwait('isready', 'readyok');
-
+    console.log('isready responded');
     const retVal = {
       info: worker.optionInfo,
       errors: worker.optionErrors,

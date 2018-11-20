@@ -65,7 +65,7 @@ const WorkerBuilder = {
           break;
 
         default:
-          console.log({ status: worker.status, line });
+          // console.log({ status: worker.status, line });
           worker.responseStack.push(line);
           break;
       }
@@ -74,13 +74,13 @@ const WorkerBuilder = {
     worker.sendAndAwait = async function (message, terminator) {
       const responses = [];
       let response;
-      console.log('posting:', message);
+      // console.log('posting:', message);
       worker.engine.postMessage(message);
 
       do {
         response = await worker.getResponse();
         responses.push(response);
-        console.log({ response });
+        // console.log({ response });
       } while (!response.startsWith(terminator));
 
       return responses;
