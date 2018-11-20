@@ -24,11 +24,11 @@ describe('go infinite test', () => {
     done();
   });
 
-  // it('is ready', (done) => {
-  //   engineQueue.isReady(instance.engineId)
-  //     .then(done())
-  //     .catch(e => done(e));
-  // });
+  it('is ready', (done) => {
+    engineQueue.isReady(instance.engineId)
+      .then(done())
+      .catch(e => done(e));
+  });
 
   it('go and stop', (done) => {
     engineQueue.go(instance.engineId, { infinite: true })

@@ -175,6 +175,7 @@ class EngineQueue {
 
 
   async isReady(uuid) {
+    console.log('isReady()');
     const worker = this.queue[uuid];
     if (!worker) {
       throw Error(`No worker found for ${uuid}`);

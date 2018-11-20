@@ -13,6 +13,19 @@ GraphQL wrapper around Universal Chess Interface
         - if 'is ready' commented out:
             -- get a best move subscription line
             -- but after test ends
+        - problem: sendAndAwait doesn't
+            - see https://eslint.org/docs/rules/no-await-in-loop
+```
+go infinite test
+   
+√ is ready
+done with loop
+done with loop
+isready responded
+wait over
+    √ go and stop (1123ms)
+```
+
 - working on subscription 
 
 ## TESTS

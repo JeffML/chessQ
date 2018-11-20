@@ -61,7 +61,8 @@ const WorkerBuilder = {
             break;
           }
         case RUNNING:
-          console.log('subscription =>', line);
+          // console.log('subscription =>', line);
+          worker.responseStack.push(line);
           break;
 
         default:
@@ -72,6 +73,7 @@ const WorkerBuilder = {
     };
 
     worker.sendAndAwait = async function (message, terminator) {
+      console.log({ message });
       const responses = [];
       let response;
       // console.log('posting:', message);
@@ -83,6 +85,7 @@ const WorkerBuilder = {
         // console.log({ response });
       } while (!response.startsWith(terminator));
 
+      console.log('done with loop');
       return responses;
     };
 
