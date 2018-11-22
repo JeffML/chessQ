@@ -4,6 +4,35 @@ import WorkerBuilder, {
   BEFORE_UCI, BEFORE_ISREADY, READY, RUNNING,
 } from './WorkerBuilder';
 
+
+function parseGo(response) {
+  // attempts to parse the bestmove response; unparsed tokens
+  // are also returned, in order of response
+  const tokens = response.slice(-1)[0].split(' ');
+
+  function getResponse(name, numVals = 1) {
+    // grab response by name, get the values, strip from tokens;
+    // remaining tokens will be 'unparsed'
+    const idx = tokens.indexOf(name);
+    if (idx >= 0) {
+      const res = tokens.splice(idx, numVals + 1);
+      return res.slice(1).join(' ');
+    }
+    return null;
+  }
+
+  const value = getResponse('bestmove');
+  const ponder = getResponse('ponder');
+  const unparsed = tokens.join(' ');
+
+  return {
+    value,
+    ponder,
+    unparsed,
+  };
+}
+
+
 /* Manages engine instances */
 class EngineQueue {
   constructor({ length }) {
@@ -182,7 +211,7 @@ class EngineQueue {
     }
 
     const response = await worker.sendAndAwait('isready', 'readyok');
-    console.log('isready responded');
+    // console.log('isready responded');
     const retVal = {
       info: worker.optionInfo,
       errors: worker.optionErrors,
@@ -193,39 +222,12 @@ class EngineQueue {
     return retVal;
   }
 
-
   async go(uuid, { infinite }) {
     const worker = this.getWorker(uuid);
     if (!worker) {
       throw Error(`No worker found for ${uuid}`);
     }
 
-    function parseGo(response) {
-      // attempts to parse the bestmove response; unparsed tokens
-      // are also returned, in order of response
-      const tokens = response.slice(-1)[0].split(' ');
-
-      function getResponse(name, numVals = 1) {
-        // grab response by name, get the values, strip from tokens;
-        // remaining tokens will be 'unparsed'
-        const idx = tokens.indexOf(name);
-        if (idx >= 0) {
-          const res = tokens.splice(idx, numVals + 1);
-          return res.slice(1).join(' ');
-        }
-        return null;
-      }
-
-      const value = getResponse('bestmove');
-      const ponder = getResponse('ponder');
-      const unparsed = tokens.join(' ');
-
-      return {
-        value,
-        ponder,
-        unparsed,
-      };
-    }
 
     if (!infinite) {
       const response = await worker.sendAndAwait('go', 'bestmove');
@@ -242,7 +244,8 @@ class EngineQueue {
       throw Error(`No worker found for ${uuid}`);
     }
 
-    return worker.send('stop');
+    const response = await worker.sendAndAwait('stop', 'bestmove');
+    return parseGo(response);
   }
 }
 

@@ -24,20 +24,18 @@ describe('go infinite test', () => {
     done();
   });
 
-  it('is ready', (done) => {
-    engineQueue.isReady(instance.engineId)
-      .then(done())
-      .catch(e => done(e));
+  it('is ready', async () => {
+    await engineQueue.isReady(instance.engineId);
   });
 
-  it('go and stop', (done) => {
-    engineQueue.go(instance.engineId, { infinite: true })
-      .then(response => response.should.equal('acknowledged'))
-      .then(() => new Promise(resolve => setTimeout(() => { resolve(); }, 1000)))
-      .then(() => console.log('wait over'))
+  it('go and stop', async () => {
+    const response = await engineQueue.go(instance.engineId, { infinite: true });
+    response.should.equal('acknowledged');
+    return new Promise(resolve => setTimeout(() => { resolve(); }, 1000))
       .then(() => engineQueue.stop(instance.engineId))
-      .then(response => response.should.equal('acknowledged'))
-      .then(() => done())
-      .catch((e) => { console.error(e); done(e); });
+      .then((res) => {
+        res.should.have.property('value');
+        res.should.have.property('ponder');
+      });
   }).timeout(5000);
 });

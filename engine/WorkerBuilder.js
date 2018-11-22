@@ -61,8 +61,11 @@ const WorkerBuilder = {
             break;
           }
         case RUNNING:
-          // console.log('subscription =>', line);
-          worker.responseStack.push(line);
+          console.log('subscription =>', line);
+          if (line.startsWith('bestmove')) {
+            worker.responseStack.push(line);
+            worker.status = READY;
+          }
           break;
 
         default:
@@ -76,16 +79,18 @@ const WorkerBuilder = {
       console.log({ message });
       const responses = [];
       let response;
-      // console.log('posting:', message);
+
       worker.engine.postMessage(message);
 
       do {
+        // console.log('await response for ', message);
         response = await worker.getResponse();
+        // console.log('responded');
         responses.push(response);
         // console.log({ response });
       } while (!response.startsWith(terminator));
 
-      console.log('done with loop');
+      // console.log('done with loop');
       return responses;
     };
 
