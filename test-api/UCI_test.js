@@ -1,6 +1,9 @@
 /* eslint-env mocha */
 import chai from 'chai';
 import fetch from './fetch';
+import createEngine from './tasks/createEngine';
+import uci from './tasks/uci';
+import isReady from './tasks/isReady';
 
 chai.should();
 
@@ -8,13 +11,7 @@ describe('UCI request', function () {
   this.timeout(5000);
 
   it('create engine instance', (done) => {
-    const query = `
-      {
-        createEngine {engineId}
-      }
-    `;
-
-    fetch(query)
+    createEngine()
       .then((data) => {
         // console.log(data);
         data.should.have.property('createEngine');
@@ -31,23 +28,7 @@ describe('UCI request', function () {
 
 
   it('Switch to UCI', (done) => {
-    const query = `
-      mutation {
-        Engine(id: "1") {
-          uci {
-            identity {
-              name, author
-            }
-            options {
-              name, type
-            }
-            uciok
-          }
-        }
-      }
-    `;
-
-    fetch(query)
+    uci()
       .then((data) => {
         // console.log(data);
         data.should.have.property('Engine');
@@ -67,18 +48,7 @@ describe('UCI request', function () {
   });
 
   it('invoke isReady', (done) => {
-    const query = `
-      mutation {
-          Engine(id: "1") {
-            isready {
-              errors
-              info
-              response
-            }
-          }
-      }`;
-
-    fetch(query)
+    isReady()
       .then((res) => {
         const eng = res.Engine;
         eng.should.have.property('isready');
