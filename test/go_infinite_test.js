@@ -1,12 +1,15 @@
 /* eslint-env mocha */
+import { PubSub } from 'apollo-server-express';
+
 const chai = require('chai');
 
 chai.should();
+const pubsub = new PubSub();
 
 const EngineQueue = require('../engine/queue').default;
 
 describe('go infinite test', () => {
-  const engineQueue = new EngineQueue({ length: 1 });
+  const engineQueue = new EngineQueue({ length: 1, pubsub });
   let instance;
 
   before((done) => {

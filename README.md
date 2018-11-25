@@ -5,27 +5,6 @@
 GraphQL wrapper around Universal Chess Interface
 
 ## Where it's at
-- current bug: 
-    - split out go infinite test; issues:
-        - if 'is ready' uncommented:
-            -- 'isready responded' occurs *after* the subscription lines
-            -- no bestmove subscription line received
-        - if 'is ready' commented out:
-            -- get a best move subscription line
-            -- but after test ends
-        - problem: sendAndAwait doesn't
-            - see https://eslint.org/docs/rules/no-await-in-loop
-```
-go infinite test
-   
-√ is ready
-done with loop
-done with loop
-isready responded
-wait over
-    √ go and stop (1123ms)
-```
-
 - working on subscription 
 
 ## TESTS
@@ -52,6 +31,7 @@ wait over
 # TODO
 Refactor
     -   throw workers in proper Node.js worker processes (like from threads.js)
+        -- or use experimental webworkers
 
 # version 0.2.0
     TODO: write resolvers using node-uci. Determine which root resolver to use by 'embedded' || 'node_uci' sysvar(?) with exe path

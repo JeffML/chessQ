@@ -1,8 +1,6 @@
 import { capitalize } from 'lodash';
 import validateFEN from 'fen-validator';
-import WorkerBuilder, {
-  BEFORE_UCI, BEFORE_ISREADY, READY, RUNNING,
-} from './WorkerBuilder';
+import WorkerBuilder, { BEFORE_ISREADY } from './WorkerBuilder';
 
 
 function parseGo(response) {
@@ -35,10 +33,12 @@ function parseGo(response) {
 
 /* Manages engine instances */
 class EngineQueue {
-  constructor({ length }) {
+  constructor({ length, pubsub }) {
     this.length = length;
     this.queue = {};
     this.monitorQueue();
+    this.pubsub = pubsub;
+    console.log({ pubsub });
   }
 
   monitorQueue() {
@@ -73,7 +73,7 @@ class EngineQueue {
   /* request an instance */
   requestEngine() {
     if (Object.keys(this.queue).length < this.length) {
-      const worker = WorkerBuilder.createWorker();
+      const worker = WorkerBuilder.createWorker({ pubsub: this.pubsub });
       this.queue[worker.uuid] = worker;
       return Promise.resolve({ engineId: worker.uuid, state: 'CREATED' });
     }

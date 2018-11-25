@@ -16,7 +16,7 @@ export {
 };
 
 const WorkerBuilder = {
-  createWorker: () => {
+  createWorker: ({ pubsub }) => {
     const worker = {
       status: BEFORE_UCI,
       uuid: process.env.MOCK_UUID || casual.uuid,
@@ -24,6 +24,7 @@ const WorkerBuilder = {
       lastUsed: new Date(),
       optionErrors: [],
       optionInfo: [],
+      pubsub,
     };
 
     worker.responseStack = [];
@@ -61,10 +62,16 @@ const WorkerBuilder = {
             break;
           }
         case RUNNING:
-          console.log('subscription =>', line);
           if (line.startsWith('bestmove')) {
             worker.responseStack.push(line);
             worker.status = READY;
+          } else {
+            console.log('subscription =>', line);
+            try {
+              worker.pubsub.publish('info', line);
+            } catch (e) {
+              console.error(e);
+            }
           }
           break;
 

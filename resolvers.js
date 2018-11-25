@@ -3,7 +3,7 @@ import MoveScalar from './moveScalar';
 import EngineQueue from './engine/queue';
 
 const pubsub = new PubSub();
-const engineQueue = new EngineQueue({ length: 5 });
+const engineQueue = new EngineQueue({ length: 5, pubsub });
 
 const EngineOps = id => ({
   uci: async () => engineQueue.uci(id),
