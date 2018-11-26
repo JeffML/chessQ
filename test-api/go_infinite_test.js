@@ -7,7 +7,7 @@ import uci from './tasks/uci';
 
 chai.should();
 
-describe('go and subscribe', function () {
+describe('go, subscribe, stop', function () {
   this.timeout(5000);
 
   it('preliminaries', async () => {
@@ -29,6 +29,10 @@ describe('go and subscribe', function () {
     res.Engine.goInfinite.should.equal('acknowledged');
   });
 
+  it('subscribe', async () => {
+    // TODO
+  });
+
   it('stop', async () => {
     const query = `mutation stop {
       Engine(id: "1") {
@@ -40,6 +44,5 @@ describe('go and subscribe', function () {
     const { Engine: { stop } } = await fetch(query);
     stop.should.have.property('value');
     stop.value.should.have.length(4);
-    console.log(JSON.stringify(stop));
   });
 });
