@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 import chai from 'chai';
+import fetch from './fetch';
 import createEngine from './tasks/createEngine';
 import isReady from './tasks/isReady';
 import uci from './tasks/uci';
@@ -15,14 +16,30 @@ describe('go and subscribe', function () {
     await isReady();
   });
 
-  // it('go and stop', async () => {
-  //   const response = await engineQueue.go(instance.engineId, { infinite: true });
-  //   response.should.equal('acknowledged');
-  //   return new Promise(resolve => setTimeout(() => { resolve(); }, 1000))
-  //     .then(() => engineQueue.stop(instance.engineId))
-  //     .then((res) => {
-  //       res.should.have.property('value');
-  //       res.should.have.property('ponder');
-  //     });
-  // }).timeout(5000);
+  it('go infinite', async () => {
+    const query = `mutation {
+      Engine(id: "1") {
+        goInfinite 
+      }
+    }`;
+
+    const res = await fetch(query);
+    res.should.have.property('Engine');
+    res.Engine.should.have.property('goInfinite');
+    res.Engine.goInfinite.should.equal('acknowledged');
+  });
+
+  it('stop', async () => {
+    const query = `mutation stop {
+      Engine(id: "1") {
+        stop {
+          value
+        }
+      }
+    }`;
+    const { Engine: { stop } } = await fetch(query);
+    stop.should.have.property('value');
+    stop.value.should.have.length(4);
+    console.log(JSON.stringify(stop));
+  });
 });
