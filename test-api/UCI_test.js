@@ -12,6 +12,7 @@ describe('UCI request', function () {
 
   it('create engine instance', (done) => {
     createEngine()
+      .then(op => op.data)
       .then((data) => {
         // console.log(data);
         data.should.have.property('createEngine');
@@ -29,6 +30,7 @@ describe('UCI request', function () {
 
   it('Switch to UCI', (done) => {
     uci()
+      .then(op => op.data)
       .then((data) => {
         // console.log(data);
         data.should.have.property('Engine');
@@ -49,6 +51,7 @@ describe('UCI request', function () {
 
   it('invoke isReady', (done) => {
     isReady()
+      .then(op => op.data)
       .then((res) => {
         const eng = res.Engine;
         eng.should.have.property('isready');
@@ -67,6 +70,7 @@ describe('UCI request', function () {
       }
     }`;
     fetch(query)
+      .then(op => op.data)
       .then((res) => {
         const eng = res.Engine;
         eng.should.have.property('newGame');

@@ -5,6 +5,7 @@ import createEngine from './tasks/createEngine';
 import isReady from './tasks/isReady';
 import uci from './tasks/uci';
 
+
 chai.should();
 
 describe('go, subscribe, stop', function () {
@@ -23,14 +24,23 @@ describe('go, subscribe, stop', function () {
       }
     }`;
 
-    const res = await fetch(query);
+    const res = (await fetch(query)).data;
     res.should.have.property('Engine');
     res.Engine.should.have.property('goInfinite');
     res.Engine.goInfinite.should.equal('acknowledged');
   });
 
   it('subscribe', async () => {
-    // TODO
+    const query = `subscription {
+      info {
+        ...Score {
+          cp
+          depth
+          time
+        }
+      }
+    }`;
+    // const res = await fetch(query).data;
   });
 
   it('stop', async () => {
@@ -41,7 +51,7 @@ describe('go, subscribe, stop', function () {
         }
       }
     }`;
-    const { Engine: { stop } } = await fetch(query);
+    const { Engine: { stop } } = (await fetch(query)).data;
     stop.should.have.property('value');
     stop.value.should.have.length(4);
   });
