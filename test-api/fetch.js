@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 /* eslint-disable import/no-extraneous-dependencies */
-// import { createApolloFetch } from 'apollo-fetch';
+// see https://www.apollographql.com/docs/link/index.html#standalone
 import fetch from 'node-fetch';
 
 import { execute, makePromise } from 'apollo-link';
@@ -20,17 +20,12 @@ const doQuery = (query) => {
   return makePromise(execute(link, operation));
 };
 
-// const fetch = query => new Promise((resolve, reject) => {
-//   apolloFetch({ query /* variables, operationName */ }) // all apolloFetch arguments are optional
-//     .then((result) => {
-//       const { data, errors /* , extensions */ } = result;
-//       if (errors) {
-//         console.error(errors);
-//         reject(new Error(errors));
-//       } else {
-//         resolve(data);
-//       }
-//     });
-// });
+const subscribe = (query, handlers) => {
+  const operation = {
+    query: gql`${query}`,
+  };
 
+  return execute(link, operation).subscribe(handlers);
+};
 export default doQuery;
+export { subscribe };

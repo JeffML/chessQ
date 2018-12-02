@@ -30,6 +30,13 @@ export default {
     createEngine: () => engineQueue.requestEngine(),
   },
   Move: MoveScalar,
+  Info: {
+    __resolveType(obj, context, info) {
+      console.log('called');
+      return 'Score';
+    },
+  },
+
   Mutation: {
     Engine: (_, { id }) => EngineOps(id),
   },

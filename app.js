@@ -11,17 +11,17 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req, connection }) => {
-    // @see https://www.apollographql.com/docs/apollo-server/v2/features/subscriptions.html#Context-with-Subscriptions
-    if (connection) {
-      // check connection for metadata
-      return {};
-    }
-    // check from req
-    const token = req.headers.authorization || '';
+  // context: async ({ req, connection }) => {
+  //   // @see https://www.apollographql.com/docs/apollo-server/v2/features/subscriptions.html#Context-with-Subscriptions
+  //   if (connection) {
+  //     // check connection for metadata
+  //     return {};
+  //   }
+  //   // check from req
+  //   const token = req.headers.authorization || '';
 
-    return { token };
-  },
+  //   return { token };
+  // },
 });
 
 server.applyMiddleware({

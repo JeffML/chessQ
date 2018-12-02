@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import chai from 'chai';
-import fetch from './fetch';
+import fetch, { subscribe } from './fetch';
 import createEngine from './tasks/createEngine';
 import isReady from './tasks/isReady';
 import uci from './tasks/uci';
@@ -17,6 +17,22 @@ describe('go, subscribe, stop', function () {
     await isReady();
   });
 
+
+  it('subscribe', async () => {
+    const query = `subscription {
+      info {
+        __typename
+      }
+    }`;
+    // const res = await fetch(query).data;
+    const handlers = {
+      next: data => console.log(`received data: ${JSON.stringify(data, null, 2)}`),
+      error: error => console.log(`received error ${error}`),
+      complete: () => console.log('complete'),
+    };
+    subscribe(query, handlers);
+  });
+
   it('go infinite', async () => {
     const query = `mutation {
       Engine(id: "1") {
@@ -30,18 +46,6 @@ describe('go, subscribe, stop', function () {
     res.Engine.goInfinite.should.equal('acknowledged');
   });
 
-  it('subscribe', async () => {
-    const query = `subscription {
-      info {
-        ...Score {
-          cp
-          depth
-          time
-        }
-      }
-    }`;
-    // const res = await fetch(query).data;
-  });
 
   it('stop', async () => {
     const query = `mutation stop {
