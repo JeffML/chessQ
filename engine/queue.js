@@ -38,7 +38,7 @@ class EngineQueue {
     this.queue = {};
     this.monitorQueue();
     this.pubsub = pubsub;
-    console.log({ pubsub });
+    // console.log({ pubsub });
   }
 
   monitorQueue() {
