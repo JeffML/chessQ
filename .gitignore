@@ -59,3 +59,6 @@ typings/
 
 # vs-code config
 .vscode
+
+# junk
+temp.js

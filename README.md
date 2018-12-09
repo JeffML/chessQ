@@ -5,7 +5,15 @@
 GraphQL wrapper around Universal Chess Interface
 
 ## Where it's at
-- working on subscription 
+subscription is not working.  response to 'stop' is slow, so I think it is time for some refactoring:
+1) use [worker threads](https://nodejs.org/api/worker_threads.html) for engine(s). Node 11.4 needed; experimental
+2) kill workers after 1 minute of inactivity
+3) create a mock UCI Engine wrapper (run in worker thread)
+4) test API against that (incl. subscriptions)
+5) include worker kill switch in API
+
+## where it needs to go
+1) need to ensure API request/response are robust as can be
 
 ## TESTS
 
@@ -26,12 +34,6 @@ GraphQL wrapper around Universal Chess Interface
 ### API tests
     - all the above unit tests via GraphQL, plus:
         -  subscriptions
-
-
-# TODO
-Refactor
-    -   throw workers in proper Node.js worker processes (like from threads.js)
-        -- or use experimental webworkers
 
 # version 0.2.0
     TODO: write resolvers using node-uci. Determine which root resolver to use by 'embedded' || 'node_uci' sysvar(?) with exe path
