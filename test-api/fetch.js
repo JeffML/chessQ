@@ -9,7 +9,6 @@ import gql from 'graphql-tag';
 
 
 const uri = 'http://localhost:3001/graphql';
-// const apolloFetch = createApolloFetch({ uri });
 const link = new HttpLink({ uri, fetch });
 
 const doQuery = (query) => {

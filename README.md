@@ -4,6 +4,15 @@
 
 GraphQL wrapper around Universal Chess Interface
 
+## details on subscription error
+### this line is logged when topic is hit (before publish in workerbuilder):
+    subscription =>|  1545013826887 | info depth 1 seldepth 1 multipv 1 baseTurn w score cp 90 nodes 20 nps 444 time 45 pv e2e4 pvSan e4 bmc 5
+### this line is returned on subscribe (in go-infinite-test subscribe handler)
+    received data: 1545013826838, {..
+
+Note that the response is received before it is sent(!): 826838 < 826887
+
+
 ## Where it's at
 subscription is not working.  response to 'stop' is slow, so I think it is time for some refactoring:
 1) use [worker threads](https://nodejs.org/api/worker_threads.html) for engine(s). Node 11.4 needed; experimental

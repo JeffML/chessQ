@@ -1,5 +1,4 @@
 import stockfish from 'stockfish';
-import casual from 'casual';
 
 /*
 Worker builder
@@ -19,7 +18,7 @@ const WorkerBuilder = {
   createWorker: ({ pubsub }) => {
     const worker = {
       status: BEFORE_UCI,
-      uuid: process.env.MOCK_UUID || casual.uuid,
+      uuid: process.env.MOCK_UUID,
       engine: stockfish(),
       lastUsed: new Date(),
       optionErrors: [],
@@ -66,9 +65,9 @@ const WorkerBuilder = {
             worker.responseStack.push(line);
             worker.status = READY;
           } else {
-            console.log('subscription =>', line);
             try {
-              worker.pubsub.publish('info', line);
+              console.log('subscription =>| ', Date.now(), '|', line);
+              worker.pubsub.publish('infoTopic', { info: line });
             } catch (e) {
               console.error(e);
             }

@@ -67,10 +67,10 @@ const ChessQSchema = [
     unparsed: String
   }
 
-  union Info = Score | Depth | Nps | BestMove
+  # union Info = Score | Depth | Nps | BestMove
 
   type Subscription {
-    info: Info
+    info: String!
   }
 `,
 ];

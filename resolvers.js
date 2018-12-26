@@ -22,7 +22,7 @@ const EngineOps = id => ({
   stop: async () => engineQueue.stop(id),
 });
 
-const TOPIC = 'info';
+const TOPIC = 'infoTopic';
 
 export default {
   Query: {
@@ -30,19 +30,20 @@ export default {
     createEngine: () => engineQueue.requestEngine(),
   },
   Move: MoveScalar,
-  Info: {
-    __resolveType(obj, context, info) {
-      console.log('called');
-      return 'Score';
-    },
-  },
+  // Info: {
+  //   __resolveType(obj, context, info) {
+  //     console.log('called');
+  //     return 'Score';
+  //   },
+  // },
+  // Info: () => 'FLUM!',
 
   Mutation: {
     Engine: (_, { id }) => EngineOps(id),
   },
   Subscription: {
     info: {
-      subscribe: withFilter(() => pubsub.asyncIterator(TOPIC), (payload, variables) => true),
+      subscribe: withFilter(() => pubsub.asyncIterator(TOPIC)),
     },
   },
 };

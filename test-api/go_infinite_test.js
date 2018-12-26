@@ -10,6 +10,14 @@ chai.should();
 
 describe('go, subscribe, stop', function () {
   this.timeout(5000);
+  const handlers = {
+    next: (data) => {
+      console.log(`received data: ${Date.now()}, ${JSON.stringify(data, null, 2)}`);
+    },
+    error: error => console.log(`received error ${error}`),
+    complete: () => console.log('complete'),
+  };
+
 
   it('preliminaries', async () => {
     await createEngine();
@@ -17,19 +25,10 @@ describe('go, subscribe, stop', function () {
     await isReady();
   });
 
-
   it('subscribe', async () => {
     const query = `subscription {
-      info {
-        __typename
-      }
+      info
     }`;
-    // const res = await fetch(query).data;
-    const handlers = {
-      next: data => console.log(`received data: ${JSON.stringify(data, null, 2)}`),
-      error: error => console.log(`received error ${error}`),
-      complete: () => console.log('complete'),
-    };
     subscribe(query, handlers);
   });
 
@@ -55,6 +54,7 @@ describe('go, subscribe, stop', function () {
         }
       }
     }`;
+
     const { Engine: { stop } } = (await fetch(query)).data;
     stop.should.have.property('value');
     stop.value.should.have.length(4);
