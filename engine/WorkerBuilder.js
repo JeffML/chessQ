@@ -1,4 +1,6 @@
 import stockfish from 'stockfish';
+import uuid from 'random-uuid-v4';
+import { UserInputError } from 'apollo-server-core';
 
 /*
 Worker builder
@@ -18,7 +20,7 @@ const WorkerBuilder = {
   createWorker: ({ pubsub }) => {
     const worker = {
       status: BEFORE_UCI,
-      uuid: process.env.MOCK_UUID,
+      uuid: process.env.MOCK_UUID || uuid(),
       engine: stockfish(),
       lastUsed: new Date(),
       optionErrors: [],

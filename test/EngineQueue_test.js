@@ -14,6 +14,7 @@ describe('Engine Queue tests', () => {
 
   it('Create Engine instance', (done) => {
     engineQueue.requestEngine().then((engine) => {
+      console.log({ engine });
       engine.should.have.property('engineId');
       engine.should.have.property('state');
       engine.engineId.should.not.have.lengthOf(0);

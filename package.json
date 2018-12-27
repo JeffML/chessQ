@@ -32,6 +32,7 @@
 		"graphql-tools": "^3.1.1",
 		"lodash": "^4.17.11",
 		"node-fetch": "^2.3.0",
+		"random-uuid-v4": "0.0.8",
 		"stockfish": "^8.0.0",
 		"subscriptions-transport-ws": "^0.9.15"
 	},
