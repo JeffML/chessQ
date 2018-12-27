@@ -43,7 +43,8 @@ export default {
   },
   Subscription: {
     info: {
-      subscribe: withFilter(() => pubsub.asyncIterator(TOPIC)),
+      // subscribe: withFilter(() => pubsub.asyncIterator(TOPIC)),
+      subscribe: () => pubsub.asyncIterator([TOPIC]),
     },
   },
 };

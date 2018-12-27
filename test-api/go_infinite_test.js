@@ -12,9 +12,9 @@ describe('go, subscribe, stop', function () {
   this.timeout(5000);
   const handlers = {
     next: (data) => {
-      console.log(`received data: ${Date.now()}, ${JSON.stringify(data, null, 2)}`);
+      console.log(`received data: ${Date.now()}`, data);
     },
-    error: error => console.log(`received error ${error}`),
+    error: error => console.error(`received error ${error}`),
     complete: () => console.log('complete'),
   };
 
@@ -45,6 +45,9 @@ describe('go, subscribe, stop', function () {
     res.Engine.goInfinite.should.equal('acknowledged');
   });
 
+  it('wait a sec', async () => new Promise((resolve) => {
+    setTimeout(() => { console.log('done waiting'); resolve(); }, 1000);
+  }));
 
   it('stop', async () => {
     const query = `mutation stop {

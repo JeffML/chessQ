@@ -1,0 +1,26 @@
+# Write your query or mutation here
+query create {
+  createEngine {
+    engineId
+  }
+}
+
+mutation uci {
+  Engine(id: "1") {
+    uci {
+      uciok
+    }
+  }
+}
+
+mutation ready {
+  Engine(id: "1") {
+    isready {
+      response
+    }
+  }
+}
+
+subscription sub {
+  info
+}
