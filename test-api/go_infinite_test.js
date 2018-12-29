@@ -41,6 +41,7 @@ describe('go, subscribe, stop', function () {
 
     const res = (await fetch(query)).data;
     res.should.have.property('Engine');
+    console.log(res);
     res.Engine.should.have.property('goInfinite');
     res.Engine.goInfinite.should.equal('acknowledged');
   });
@@ -61,5 +62,9 @@ describe('go, subscribe, stop', function () {
     const { Engine: { stop } } = (await fetch(query)).data;
     stop.should.have.property('value');
     stop.value.should.have.length(4);
+  });
+
+  it('kill', async () => {
+    // TODO
   });
 });

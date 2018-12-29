@@ -1,6 +1,5 @@
 import stockfish from 'stockfish';
 import uuid from 'random-uuid-v4';
-import { UserInputError } from 'apollo-server-core';
 
 /*
 Worker builder
@@ -28,6 +27,7 @@ const WorkerBuilder = {
       pubsub,
     };
 
+    // console.log({ worker });
     worker.responseStack = [];
 
     worker.getResponse = async function X() {
