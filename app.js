@@ -17,10 +17,10 @@ const server = new ApolloServer({
 
 server.applyMiddleware({
   app,
-  gui: {
-    endpointURL: '/graphql',
-    subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`,
-  },
+  // gui: {
+  //   endpointURL: '/graphql',
+  //   // subscriptionsEndpoint: `ws://localhost:${PORT}/subscriptions`,
+  // },
 });
 
 const httpServer = http.createServer(app);
