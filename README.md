@@ -8,7 +8,7 @@ GraphQL wrapper around Universal Chess Interface
 Subscriptions are now working, both in test and via Playground. I switched to apollo-link-ws for the tests, though I am uncertain as to whether that was the real solution (I discovered that VSCode is hiding part of my terminal output).
 
 response to 'stop' is slow, so I think it is time for some refactoring:
-1) use [worker threads](https://nodejs.org/api/worker_threads.html) for engine(s). Node 11.4 needed; experimental
+1) use [worker threads](https://nodejs.org/api/worker_threads.html) for engine(s). Node 10.5.4 needed; experimental
 2) kill workers after 1 minute of inactivity
 3) create a mock UCI Engine wrapper (run in worker thread)
 4) test API against that (incl. subscriptions)
