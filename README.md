@@ -4,6 +4,11 @@
 
 GraphQL wrapper around Universal Chess Interface
 
+Breakdown:
+1. EngineQueue: rename to  EnginePool
+2. WorkerBuilder rename EngineBuilder, returning Engine (can be a mock)
+3. Have Engine encapsulate(?) a worker thread
+
 ## Where it's at
 Subscriptions are now working, both in test and via Playground. I switched to apollo-link-ws for the tests, though I am uncertain as to whether that was the real solution (I discovered that VSCode is hiding part of my terminal output).
 

@@ -30,13 +30,13 @@ export default {
     createEngine: () => engineQueue.requestEngine(),
   },
   Move: MoveScalar,
+  // FIXME: info is just returning a string for now
   // Info: {
   //   __resolveType(obj, context, info) {
   //     console.log('called');
   //     return 'Score';
   //   },
   // },
-  // Info: () => 'FLUM!',
 
   Mutation: {
     Engine: (_, { id }) => EngineOps(id),
