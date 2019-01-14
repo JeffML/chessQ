@@ -6,6 +6,7 @@
 	"scripts": {
 		"dev": "nodemon app.js --exec babel-node --presets env",
 		"start": "babel-node --presets env app.js",
+		"mock": "MOCK_UUID=1 babel-node --presets env app.js",
 		"debug": "babel-node --inspect --presets env app.js",
 		"bare": "node node_modules/stockfish/src/stockfish.js",
 		"test": "mocha --require babel-core/register ./test/*test.js",

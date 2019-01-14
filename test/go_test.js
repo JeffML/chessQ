@@ -3,7 +3,7 @@ const chai = require('chai');
 
 chai.should();
 
-const EngineQueue = require('../engine/queue').default;
+const EngineQueue = require('../engine/EnginePool').default;
 
 describe('go test', () => {
   const engineQueue = new EngineQueue({ length: 1 });

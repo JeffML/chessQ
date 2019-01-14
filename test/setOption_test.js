@@ -2,7 +2,7 @@
 const chai = require('chai');
 
 const should = chai.should();
-const EngineQueue = require('../engine/queue').default;
+const EngineQueue = require('../engine/EnginePool').default;
 
 
 describe('Set Option tests', () => {

@@ -65,6 +65,6 @@ describe('go, subscribe, stop', function () {
   });
 
   it('kill', async () => {
-    // TODO
+    process.exit();
   });
 });

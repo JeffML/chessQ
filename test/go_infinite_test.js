@@ -6,7 +6,7 @@ const chai = require('chai');
 chai.should();
 const pubsub = new PubSub();
 
-const EngineQueue = require('../engine/queue').default;
+const EngineQueue = require('../engine/EnginePool').default;
 
 describe('go infinite test', () => {
   const engineQueue = new EngineQueue({ length: 1, pubsub });

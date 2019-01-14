@@ -1,25 +1,25 @@
 import { PubSub, withFilter } from 'apollo-server-express';
 import MoveScalar from './moveScalar';
-import EngineQueue from './engine/queue';
+import EnginePool from './engine/EnginePool';
 
 const pubsub = new PubSub();
-const engineQueue = new EngineQueue({ length: 5, pubsub });
+const enginePool = new EnginePool({ length: 5, pubsub });
 
 const EngineOps = id => ({
-  uci: async () => engineQueue.uci(id),
-  setSpinOption: async ({ name, value }) => engineQueue.setSpinOption(id, name, value),
-  setButtonOption: async ({ name }) => engineQueue.setButtonOption(id, name),
-  setCheckOption: async ({ name, value }) => engineQueue.setCheckOption(id, name, value),
-  setComboOption: async ({ name, value }) => engineQueue.setComboOption(id, name, value),
-  isready: async () => engineQueue.isReady(id),
+  uci: async () => enginePool.uci(id),
+  setSpinOption: async ({ name, value }) => enginePool.setSpinOption(id, name, value),
+  setButtonOption: async ({ name }) => enginePool.setButtonOption(id, name),
+  setCheckOption: async ({ name, value }) => enginePool.setCheckOption(id, name, value),
+  setComboOption: async ({ name, value }) => enginePool.setComboOption(id, name, value),
+  isready: async () => enginePool.isReady(id),
   newGame: async (data) => {
     const { positionType, moves } = data;
     console.log({ positionType, moves });
-    return engineQueue.newGame(id, positionType, moves);
+    return enginePool.newGame(id, positionType, moves);
   },
-  go: async () => engineQueue.go(id, { infinite: false }),
-  goInfinite: async () => engineQueue.go(id, { infinite: true }),
-  stop: async () => engineQueue.stop(id),
+  go: async () => enginePool.go(id, { infinite: false }),
+  goInfinite: async () => enginePool.go(id, { infinite: true }),
+  stop: async () => enginePool.stop(id),
 });
 
 const TOPIC = 'infoTopic';
@@ -27,7 +27,7 @@ const TOPIC = 'infoTopic';
 export default {
   Query: {
     version: () => '0.1.0', // TODO: read from package.json
-    createEngine: () => engineQueue.requestEngine(),
+    createEngine: () => enginePool.requestEngine(),
   },
   Move: MoveScalar,
   // FIXME: info is just returning a string for now

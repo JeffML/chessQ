@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import chai from 'chai';
-import EngineQueue from '../engine/queue';
+import EngineQueue from '../engine/EnginePool';
 
 chai.should();
 

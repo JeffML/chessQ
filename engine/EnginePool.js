@@ -32,7 +32,7 @@ function parseGo(response) {
 
 
 /* Manages engine instances */
-class EngineQueue {
+class EnginePool {
   constructor({ length, pubsub }) {
     this.length = length;
     this.queue = {};
@@ -96,7 +96,7 @@ class EngineQueue {
     // console.log("uuid is", worker.uuid)
     const responses = await worker.sendAndAwait('uci', 'uciok');
     worker.status = BEFORE_ISREADY;
-    worker.options = EngineQueue.parseUciResponses(responses);
+    worker.options = EnginePool.parseUciResponses(responses);
     // console.log('wo', worker.options);
     return worker.options;
   }
@@ -249,4 +249,4 @@ class EngineQueue {
   }
 }
 
-export default EngineQueue;
+export default EnginePool;
