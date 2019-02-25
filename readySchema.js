@@ -22,6 +22,6 @@ const typeDefs = `
     ucinewgame(engineId: String!): String!
     position(engineId: String!, position: PositionInput!, moves: [Move]): String!
   }
-`
+`;
 
-export default[typeDefs]
+export default [typeDefs];

@@ -15,6 +15,7 @@ const moveScalar = new GraphQLScalarType({
       // FIXME: do a pattern check
       return ast.value;
     }
+    return ast;
   },
 });
 
