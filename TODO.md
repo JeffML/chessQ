@@ -1,6 +1,6 @@
 Breakdown:
 1. ~~EngineQueue: rename to  EnginePool~~
-2. EngineBuilder rename EngineBuilder, returning Engine (can be a mock)
+2. ~~EngineBuilder rename EngineBuilder, returning Engine (can be a mock)~~
 3. Have Engine encapsulate(?) a worker thread running Stockfish (internally or as yet another process)
 
 ## Where it's at
@@ -15,3 +15,4 @@ response to 'stop' is slow, so I think it is time for some refactoring:
 
 ## where it needs to go
 1) need to ensure API request/response are robust as can be
+  -- issues:  sendAndAwait; Errors; engine state management
