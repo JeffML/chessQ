@@ -41,4 +41,4 @@ const typeDefs = `
     uciok : Boolean!
   }
 `;
-export default[typeDefs];
+export default [typeDefs];

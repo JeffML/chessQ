@@ -1,4 +1,4 @@
-import { PubSub, withFilter } from 'apollo-server-express';
+import { PubSub /* , withFilter */ } from 'apollo-server-express';
 import MoveScalar from './moveScalar';
 import EnginePool from './engine/EnginePool';
 
