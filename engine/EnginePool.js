@@ -1,6 +1,6 @@
 import { capitalize } from 'lodash';
 import validateFEN from 'fen-validator';
-import WorkerBuilder, { BEFORE_ISREADY } from './WorkerBuilder';
+import EngineBuilder, { BEFORE_ISREADY } from './EngineBuilder';
 
 
 function parseGo(response) {
@@ -73,7 +73,7 @@ class EnginePool {
   /* request an instance */
   requestEngine() {
     if (Object.keys(this.queue).length < this.length) {
-      const worker = WorkerBuilder.createWorker({ pubsub: this.pubsub });
+      const worker = EngineBuilder.createWorker({ pubsub: this.pubsub });
       this.queue[worker.uuid] = worker;
       return Promise.resolve({ engineId: worker.uuid, state: 'CREATED' });
     }
