@@ -1,18 +1,16 @@
-Breakdown:
-1. ~~EngineQueue: rename to  EnginePool~~
-2. ~~EngineBuilder rename EngineBuilder, returning Engine (can be a mock)~~
-3. Have Engine encapsulate(?) a worker thread running Stockfish (internally or as yet another process)
+# further functionality and improvements
 
-## Where it's at
-Subscriptions are now working, both in test and via Playground. I switched to apollo-link-ws for the tests, though I am uncertain as to whether that was the real solution (I discovered that VSCode is hiding part of my terminal output).
+## other engine support
+For development of this package, the [embedded stockfish engine](https://www.npmjs.com/package/stockfish) was useful.  For a full implementation, it would be necessary to talk to non-embedded engines running as separate processes; [there is an npm package for this](https://www.npmjs.com/package/node-uci).
 
-response to 'stop' is slow, so I think it is time for some refactoring:
-1) use [worker threads](https://nodejs.org/api/worker_threads.html) for engine(s). Node 10.5.4 needed; experimental
-2) kill workers after 1 minute of inactivity
-3) create a mock UCI Engine wrapper (run in worker thread)
-4) test API against that (incl. subscriptions)
-5) include worker kill switch in API
+### Worker Threads
+Ideally, the launching, communication, and stopping of chess engines would be done using [Node.js Worker Threads](https://hackernoon.com/simple-bidirectional-messaging-in-node-js-worker-threads-7fe41de22e3c) (fully supported in version 11.x, and experimentally supported in 10.x). This shouldn't be too hard to do.
 
-## where it needs to go
-1) need to ensure API request/response are robust as can be
-  -- issues:  sendAndAwait; Errors; engine state management
+## parsing
+The parsing of engine responses is pretty rudimentary. 
+
+## error handling
+The application tracks engine state based on commands so far issued.  This isn't 100% reliable, but probably the best that can be done.  The biggest problems are (1) unexpected errors, and (2) unexpected responses from the engine.  This may require the engine to be shutdown on an error message with debugging info sent back to the client application.
+
+## documentation
+The code isn't very well documented, but does follow a basic template for simple GraphQL server applications. Tests are complete enough to provide working knowledge as to use.

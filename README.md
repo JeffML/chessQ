@@ -3,9 +3,9 @@
 ![build status](https://travis-ci.org/JeffML/chessQ.svg?branch=master)
 
 # GraphQL API for Universal Chess Interface
-This started as a mock API I wrote as a proof-of-concept for Chess.com. I found the implementation difficult because the UCI protocol is stream-based, and not designed for a call-response type API that GraphQL provides, yet I met with some success. Further work on error handling and support for other engines awaits help or ambition.
+This started as a [mock API I wrote](https://medium.freecodecamp.org/mocking-a-graphql-wrapper-around-the-universal-chess-interface-1c5bb1acd821) as a proof-of-concept for Chess.com. The implementation prooved difficult because the [UCI protocol](http://wbec-ridderkerk.nl/html/UCIProtocol.html) is stream-based, and not designed for a call-response type API that GraphQL provides.  Nonetheless, this library represents a good progress. Ideas for further improvement can be found in the TODO.md file.
 
-In this version, the implementation wraps an GraphQL API around an embedded stockfish engine (transpiled from original source to Javascript). Not ideal, but good for testing.
+For this version, the implementation wraps an GraphQL API around an [embedded stockfish engine](https://www.npmjs.com/package/stockfish) (transpiled from original source to JavaScript). 
 
 ## Here are the package.json targets:
 * npm run start
@@ -14,7 +14,7 @@ In this version, the implementation wraps an GraphQL API around an embedded stoc
   * runs the unit tests
 * other run targets are:
   * dev
-    * hot server
+    * hot server which reloads on code changes
   * mock
     * for API testing; the engine id is fixed at 1 rather than generated randomly
   * test-api
@@ -26,7 +26,7 @@ I will assume some familiarity with GraphQL.  When the server is launched (`npm 
 🚀 Server ready at http://localhost:3001/graphql
 🚀 Subscriptions ready at ws://localhost:3001/graphql
 ```
-Subscriptions are a GraphQL feature that allows a client to subscribe to events that are emitted form the stockfish engine wrapper. As of this writing, most of the GraphQL API is call-response, however when running analysis, _info_ strings (unparsed) are returned via subscription.
+Subscriptions are a GraphQL feature that allows a client to subscribe to events that are emitted form the stockfish engine wrapper. As of this writing, most of the GraphQL API is call-response, however when running analysis, _info_ strings (unparsed) are returned via subscription. Note that the url shown for subscriptions is for internal use only. See below.
 
 ## Launching an engine and doing analysis
 The tests in test-api, when run, are a good illustration of API interaction, including subscribing to info events.  If you wish to use the GraphQL "playground", then point your browser to `http://localhost:3001/graphql`.  Here are some commands to start with (mind the order of execution!):
