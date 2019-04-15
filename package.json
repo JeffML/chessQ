@@ -1,7 +1,7 @@
 {
 	"name": "chessq",
 	"version": "0.3.0",
-	"description": "GraphQL API for UCI",
+  "description": "GraphQL API for the Universal Chess Interface",
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon app.js --exec babel-node --presets env",
@@ -50,7 +50,7 @@
 	},
 	"keywords": [
 		"chess",
-		"analysis"
+		"GraphQL", "UCI", "stockfish"
 	],
 	"author": "Jeff M. Lowery",
 	"license": "UNLICENSED",
