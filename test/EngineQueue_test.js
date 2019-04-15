@@ -5,7 +5,7 @@ import EngineQueue from '../engine/EnginePool';
 chai.should();
 
 describe('Engine Queue tests', () => {
-  const engineQueue = new EngineQueue({ length: 1 });
+  const engineQueue = new EngineQueue({ length: 3 });
 
   after((done) => {
     engineQueue.killAllAndExit();

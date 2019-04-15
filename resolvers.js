@@ -26,11 +26,11 @@ const TOPIC = 'infoTopic';
 
 export default {
   Query: {
-    version: () => '0.1.0', // TODO: read from package.json
+    version: () => '0.3.0', // TODO: read from package.json
     createEngine: () => enginePool.requestEngine(),
   },
   Move: MoveScalar,
-  // FIXME: info is just returning a string for now
+  // TODO: info is just returning a string for now
   // Info: {
   //   __resolveType(obj, context, info) {
   //     console.log('called');
