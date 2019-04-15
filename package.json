@@ -1,7 +1,7 @@
 {
 	"name": "chessq",
-	"version": "1.1.0",
-	"description": "Chess game analyser",
+	"version": "0.3.0",
+	"description": "GraphQL API for UCI",
 	"main": "index.js",
 	"scripts": {
 		"dev": "nodemon app.js --exec babel-node --presets env",
