@@ -1,6 +1,6 @@
 {
 	"name": "chessq",
-	"version": "0.3.0",
+	"version": "0.3.1",
   "description": "GraphQL API for the Universal Chess Interface",
 	"main": "index.js",
 	"scripts": {
