@@ -1,4 +1,4 @@
-# further functionality and improvements
+# ideas for further functionality and improvements
 
 ## other engine support
 For development of this package, the [embedded stockfish engine](https://www.npmjs.com/package/stockfish) was useful.  For a full implementation, it would be necessary to talk to non-embedded engines running as separate processes; [there is an npm package for this](https://www.npmjs.com/package/node-uci).
