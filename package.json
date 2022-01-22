@@ -30,7 +30,7 @@
 		"graphql-tag": "^2.10.1",
 		"graphql-tools": "^3.1.1",
 		"lodash": "^4.17.15",
-		"node-fetch": "^2.3.0",
+		"node-fetch": "^3.1.1",
 		"random-uuid-v4": "0.0.8",
 		"stockfish": "^8.0.0",
 		"subscriptions-transport-ws": "^0.9.15"
